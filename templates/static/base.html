@@ -1,0 +1,36 @@
+<!-- base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Website{% endblock %}</title>
+</head>
+<body>
+<!-- navbar.html -->
+<header>
+    <nav>
+        <ul style="list-style-type: none; margin: 0; padding: 0; overflow: hidden; background-color: #333;">
+            <li style="float: left;">
+                <a href="/" style="display: block; color: white; text-align: center; padding: 14px 16px; text-decoration: none;">{{content.nav.home}}</a>
+            </li>
+            <li style="float: left;">
+                <a href="/about" style="display: block; color: white; text-align: center; padding: 14px 16px; text-decoration: none;">{{content.nav.prof}}</a>
+            </li>
+            <li style="float: left;">
+                <a href="/about" style="display: block; color: white; text-align: center; padding: 14px 16px; text-decoration: none;">{{content.nav.choose_language}}</a>
+            </li>
+            <li style="float: left;">
+                <a href="/services" style="display: block; color: white; text-align: center; padding: 14px 16px; text-decoration: none;">{{content.nav.settings}}</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+    {% block content %}
+    <!-- Default content goes here -->
+    {% endblock %}
+    
+    {% include 'static/footer.html' %}
+</body>
+</html>

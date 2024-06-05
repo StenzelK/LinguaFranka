@@ -1,0 +1,12 @@
+{
+    "nav": {
+        "home": "Hauptsächlich",
+        "prof": "Profil",
+        "choose_language": "Wählen Sie eine Sprache zum Üben",
+        "settings": "Einstellungen"
+    },
+    "index": {
+        "title": "LiguaFranka",
+        "test_message": "Willkommen auf der Homepage"
+    }
+}

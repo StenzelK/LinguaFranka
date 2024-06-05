@@ -1,0 +1,12 @@
+{
+    "nav": {
+        "home": "Principale",
+        "prof": "Profilo",
+        "choose_language": "Scegli una lingua per esercitarsi",
+        "settings": "Impostazioni"
+    },
+    "index": {
+        "title": "LiguaFranka",
+        "test_message": "Benvenuti nella home page"
+    }
+}

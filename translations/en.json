@@ -1,0 +1,13 @@
+{
+    "nav": {
+        "home": "Main",
+        "prof": "Profile",
+        "choose_language": "Choose a language to practice",
+        "settings": "Settings"
+    },
+    "index": {
+        "title": "LiguaFranka",
+        "test_message": "Welcome to the Home Page"        
+    }
+
+}

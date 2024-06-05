@@ -1,0 +1,8 @@
+# Configuration Settings for My Application
+settings:
+  overwrite_sys_lang: true
+  language: 'ru'
+
+
+api_keys:
+  openai: 'your-openai-api-key'
