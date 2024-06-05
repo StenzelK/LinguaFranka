@@ -1,7 +1,7 @@
 {
     "name": "John Doe",
     "age": 30,
-    "nativeLanguage": "English",
+    "native_language": "English",
     "interests": [
       "reading",
       "traveling",

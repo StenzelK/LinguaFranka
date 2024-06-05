@@ -9,16 +9,40 @@
 <h1>{{ content.profile.current_profile }}</h1>
 <h3>{{ content.profile.name }}: {{ content.user_profile.name }}</h3>
 <h3>{{ content.profile.age }}: {{ content.user_profile.age }}</h3>
-<h3>{{ content.profile.nativeLanguage }}: {{ content.user_profile.nativeLanguage }}</h3>
+<h3>{{ content.profile.native_language }}: {{ content.user_profile.native_language }}</h3>
 <h3>{{ content.profile.interests}}:</h3>
 <ul>
     {% for interest in content.user_profile.interests %}
     <li>{{ interest }}</li>
     {% endfor %}
 </ul>
-<ul>
-    {% for prof in content.profile_list %}
-    <li>{{ prof }}</li>
-    {% endfor %}
-</ul>
+<form action="/change_user_profile" method="post">
+    <label for="profile">{{ content.profile.change_profile }}:</label>
+    <select name="profile" id="profile">
+        {% for profile in content.profile_list %}
+        <option value="{{ profile }}">{{ profile }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit">{{content.profile.submit}}</button>
+</form>
+<h1>{{content.profile.add_profile}}</h1>
+<form action="/add_user_profile" method="post">
+    <div>
+        <label for="name">{{ content.profile.name }}:</label>
+        <input type="text" id="name" name="name" required>
+    </div>
+    <div>
+        <label for="age">{{ content.profile.age }}:</label>
+        <input type="number" id="age" name="age" required>
+    </div>
+    <div>
+        <label for="native_language">{{ content.profile.native_language }}:</label>
+        <input type="text" id="native_language" name="native_language" required>
+    </div>
+    <div>
+        <label for="interests">{{ content.profile.interests}}:</label>
+        <input type="text" id="interests" name="interests" required placeholder={{ content.profile.eg }}>
+    </div>
+    <button type="submit">{{content.profile.submit}}</button>
+</form>
 {% endblock %}

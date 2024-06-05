@@ -15,8 +15,12 @@
         "current_profile": "Current profile",
         "name": "Name",
         "age": "Age",
-        "nativeLanguage": "Native language",
-        "interests": "Interests"        
+        "native_language": "Native language",
+        "interests": "Interests",  
+        "change_profile": "Change profile",
+        "add_profile": "Add profile",
+        "eg": "reading, traveling, cooking",  
+        "submit": "Submit"  
     }
 
 }

@@ -1,9 +1,8 @@
-# Configuration Settings for My Application
 settings:
   overwrite_sys_lang: false
-  language: 'ru'
-  "user_profile": "Stachu"
+  language: pl
+  user_profile: "Zbycho_sob\xF3tka"
 
 
 api_keys:
-  openai: 'your-openai-api-key'
+  openai: your-openai-api-key

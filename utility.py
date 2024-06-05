@@ -96,9 +96,10 @@ def load_site_data():
     config = load_config()
     settings = config.get("settings")
     site_lang = get_system_language_iso_639_1() if not settings["overwrite_sys_lang"] else settings["language"]
+    user_profile = settings["user_profile"]
     
     
-    return {"config": config, "settings": settings, "site_lang": site_lang}
+    return {"config": config, "settings": settings, "site_lang": site_lang, "user_profile": user_profile}
 
 def load_user_profile(profile):
     base_dir = 'user_profiles'
@@ -125,3 +126,16 @@ def get_profile_list():
             profiles.append(filename[:-5].capitalize())
 
     return profiles
+
+def update_user_profile(new_profile):
+    file_path = "config.yaml"
+    with open(file_path, 'r') as file:
+        config = yaml.safe_load(file)
+    
+    # Update the user_profile
+    config['settings']['user_profile'] = new_profile
+    
+    # Write the updated data back to the file
+    with open(file_path, 'w') as file:
+        yaml.safe_dump(config, file)
+
