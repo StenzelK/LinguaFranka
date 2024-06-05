@@ -1,0 +1,24 @@
+<!-- profile.html -->
+{% extends 'base.html' %}
+
+{% block title %}
+{{ content.profile.title }}
+{% endblock %}
+
+{% block content %}
+<h1>{{ content.profile.current_profile }}</h1>
+<h3>{{ content.profile.name }}: {{ content.user_profile.name }}</h3>
+<h3>{{ content.profile.age }}: {{ content.user_profile.age }}</h3>
+<h3>{{ content.profile.nativeLanguage }}: {{ content.user_profile.nativeLanguage }}</h3>
+<h3>{{ content.profile.interests}}:</h3>
+<ul>
+    {% for interest in content.user_profile.interests %}
+    <li>{{ interest }}</li>
+    {% endfor %}
+</ul>
+<ul>
+    {% for prof in content.profile_list %}
+    <li>{{ prof }}</li>
+    {% endfor %}
+</ul>
+{% endblock %}

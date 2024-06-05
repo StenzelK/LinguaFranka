@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}My Website{% endblock %}</title>
+    <link rel="stylesheet" href="/static/base.css">
 </head>
 <body>
-<!-- navbar.html -->
 <header>
     <nav>
         <ul style="list-style-type: none; margin: 0; padding: 0; overflow: hidden; background-color: #333;">
@@ -15,13 +15,13 @@
                 <a href="/" style="display: block; color: white; text-align: center; padding: 14px 16px; text-decoration: none;">{{content.nav.home}}</a>
             </li>
             <li style="float: left;">
-                <a href="/about" style="display: block; color: white; text-align: center; padding: 14px 16px; text-decoration: none;">{{content.nav.prof}}</a>
+                <a href="/profile" style="display: block; color: white; text-align: center; padding: 14px 16px; text-decoration: none;">{{content.nav.prof}}</a>
             </li>
             <li style="float: left;">
-                <a href="/about" style="display: block; color: white; text-align: center; padding: 14px 16px; text-decoration: none;">{{content.nav.choose_language}}</a>
+                <a href="/chooselang" style="display: block; color: white; text-align: center; padding: 14px 16px; text-decoration: none;">{{content.nav.choose_language}}</a>
             </li>
             <li style="float: left;">
-                <a href="/services" style="display: block; color: white; text-align: center; padding: 14px 16px; text-decoration: none;">{{content.nav.settings}}</a>
+                <a href="/settings" style="display: block; color: white; text-align: center; padding: 14px 16px; text-decoration: none;">{{content.nav.settings}}</a>
             </li>
         </ul>
     </nav>
@@ -31,6 +31,8 @@
     <!-- Default content goes here -->
     {% endblock %}
     
-    {% include 'static/footer.html' %}
+    <footer>
+        <p>Copyright © 2024</p>
+    </footer>
 </body>
 </html>

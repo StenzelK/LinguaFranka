@@ -99,3 +99,29 @@ def load_site_data():
     
     
     return {"config": config, "settings": settings, "site_lang": site_lang}
+
+def load_user_profile(profile):
+    base_dir = 'user_profiles'
+    profile_path = os.path.join(base_dir, f"{profile}.json")
+    default_path = os.path.join(base_dir, "default.json")
+
+    # Check if the specified profile JSON file exists
+    if os.path.exists(profile_path):
+        with open(profile_path, 'r', encoding="utf-8") as file:
+            return json.load(file)
+    else:
+        # If the specified file does not exist, load the default profile
+        with open(default_path, 'r', encoding="utf-8") as file:
+            return json.load(file)
+        
+def get_profile_list():
+    base_dir = 'user_profiles'
+    
+    profiles = []
+
+    # Loop through all files in the directory
+    for filename in os.listdir(base_dir):
+        if filename.endswith(".json"):  # Check if the file is a JSON file
+            profiles.append(filename[:-5].capitalize())
+
+    return profiles

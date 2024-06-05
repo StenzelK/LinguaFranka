@@ -1,7 +1,8 @@
 # Configuration Settings for My Application
 settings:
-  overwrite_sys_lang: true
+  overwrite_sys_lang: false
   language: 'ru'
+  "user_profile": "Stachu"
 
 
 api_keys:

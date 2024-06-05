@@ -8,6 +8,15 @@
     "index": {
         "title": "LiguaFranka",
         "test_message": "Welcome to the Home Page"        
+    },
+
+    "profile": {
+        "title": "LiguaFranka",
+        "current_profile": "Current profile",
+        "name": "Name",
+        "age": "Age",
+        "nativeLanguage": "Native language",
+        "interests": "Interests"        
     }
 
 }
