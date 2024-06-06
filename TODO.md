@@ -63,3 +63,9 @@
 1. **Remove `user_lang` from Config**
    - **Consideration: Redundancy?**
    - Evaluate the redundancy of `user_lang` in the config, considering the possibility of using `native_language` from user profiles instead.
+   
+### Additional features
+
+1. **Implement a tutorial for new users**
+	- **Consideration: Nessesary?**
+	- To be determined based on tester feedback
