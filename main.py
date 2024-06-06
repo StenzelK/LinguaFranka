@@ -31,7 +31,7 @@ def read_root(request: Request):
         {"request": request, "content": content})
     
 @app.get("/profile", response_class=HTMLResponse)
-def read_root(request: Request):
+def read_prof(request: Request):
     
     site_data=load_site_data()
     
@@ -50,6 +50,29 @@ def read_root(request: Request):
     content = nest_dictionaries(dicts_to_combine)
     
     return templates.TemplateResponse("profile.html",\
+        {"request": request, "content": content})
+    
+@app.get("/lang", response_class=HTMLResponse)
+def read_lang(request: Request):
+    
+    site_data=load_site_data()
+    site_lang = site_data["site_lang"]
+    translation = load_translations(site_lang)
+    
+    practice_lang = code_to_lang(site_data["practice_lang"])
+    
+    if site_lang is not "en":
+        practice_lang = translate_string(practice_lang, site_lang)
+
+    dicts_to_combine = {
+    "nav": translation["nav"],
+    "lang": translation["lang"],
+    "practice_lang": practice_lang,
+        }
+    
+    content = nest_dictionaries(dicts_to_combine)
+    
+    return templates.TemplateResponse("lang.html",\
         {"request": request, "content": content})
     
     
@@ -87,3 +110,18 @@ async def add_user_profile(name: str = Form(...), age: int = Form(...),
     
     
     return RedirectResponse(url="/profile", status_code=303)
+
+@app.post("/chooselang")
+async def choose_language(language: str = Form(...)):
+    """
+    Endpoint to handle language choice from a form.
+
+    Args:
+    language (str): The language choice submitted from the form.
+
+    Returns:
+    dict: A confirmation message with the chosen language.
+    """
+    update_practice_language(language)
+    
+    return RedirectResponse(url="/lang", status_code=303)

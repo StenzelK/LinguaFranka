@@ -3,6 +3,7 @@ import locale
 import os
 from googletrans import Translator, LANGUAGES
 import yaml
+from GPT_tools import *
 
 def load_config():
     """ Load the YAML configuration file. """
@@ -26,8 +27,6 @@ def get_system_language_iso_639_1():
     language_code_iso_639_1 = default[:2] if default else None
     
     return language_code_iso_639_1
-
-
 
 def get_global_translation(target_lang):
     """
@@ -69,6 +68,27 @@ def get_global_translation(target_lang):
     with open(output_file_path, 'w', encoding='utf-8') as file:
         json.dump(translated_data, file, ensure_ascii=False, indent=4)
         
+def translate_string(string, lang):
+    """
+    Translates a string into the specified language using googletrans library.
+
+    Args:
+    string (str): The string to translate.
+    lang (str): The ISO-639-1 code of the target language.
+
+    Returns:
+    str: The translated text.
+
+    Raises:
+    ValueError: If the provided language code is unsupported.
+    """
+    
+    translator = Translator()
+    if lang not in LANGUAGES:
+        raise ValueError(f"Unsupported language code: {lang}")
+    
+    return translator.translate(string, dest=lang).text
+        
 def load_translations(site_lang):
     base_dir = 'translations'
     # Construct the path for the requested language file
@@ -95,11 +115,12 @@ def nest_dictionaries(dict_of_dicts):
 def load_site_data():
     config = load_config()
     settings = config.get("settings")
-    site_lang = get_system_language_iso_639_1() if not settings["overwrite_sys_lang"] else settings["language"]
+    site_lang = get_system_language_iso_639_1() if not settings["overwrite_sys_lang"] else settings["user_lang"]
     user_profile = settings["user_profile"]
+    practice_lang = settings["practice_lang"]
     
     
-    return {"config": config, "settings": settings, "site_lang": site_lang, "user_profile": user_profile}
+    return {"config": config, "settings": settings, "site_lang": site_lang, "user_profile": user_profile, "practice_lang": practice_lang}
 
 def load_user_profile(profile):
     base_dir = 'user_profiles'
@@ -138,4 +159,83 @@ def update_user_profile(new_profile):
     # Write the updated data back to the file
     with open(file_path, 'w') as file:
         yaml.safe_dump(config, file)
+        
+def update_practice_language(language):
+    file_path = "config.yaml"
+    with open(file_path, 'r') as file:
+        config = yaml.safe_load(file)
+    
+    code = lang_to_code(language)
+    # Update the practice_lang
+    config['settings']['practice_lang'] = code
+    
+    # Write the updated data back to the file
+    with open(file_path, 'w') as file:
+        yaml.safe_dump(config, file)
+        
+def load_languages():
+    """
+    Loads language data from a JSON file located in the static directory.
+    
+    Returns:
+    list: A list of dictionaries, where each dictionary contains a 'code' and a 'name' of a language.
+    """
+    try:
+        with open('static/ISO-639-1-language.json', 'r') as file:
+            languages = json.load(file)
+            return languages
+    except FileNotFoundError:
+        print("The language file could not be found.")
+        return []
+    except json.JSONDecodeError:
+        print("The language file is not in proper JSON format.")
+        return []
 
+def lang_to_code(name, failover=False, depth=0):
+    """
+    Converts a partial or full language name to its corresponding ISO-639-1 code.
+    
+    Attempts to normalize input into English.
+    
+    If no code is found, attempts AI interpretation of input to determine the language.
+    Limits recursion to a single failover attempt.
+    
+    If AI failover is not successful, returns "NoLang".
+    
+    Args:
+    name (str): The partial or full name of the language.
+    failover (bool): Whether the function is in failover mode.
+    depth (int): Current recursion depth, default is 0.
+    
+    Returns:
+    str: The first matching ISO-639-1 code or "NoLang" if no match is found.
+    """
+    name = name.lower()
+    name = translate_string(name, "en")
+    languages = load_languages()
+    for language in languages:
+        if name in language['name'].lower():
+            return language['code']
+
+    # Check if failover is already used or if the depth limit is reached
+    if not failover and depth < 1:
+        guess_name = gpt_guess_lang(name)  # Assuming this function returns a guessed language name
+        return lang_to_code(guess_name, failover=True, depth=depth+1)
+    
+    return "NoLang"
+
+def code_to_lang(code):
+    """
+    Converts an ISO-639-1 code to its corresponding language name. If no language is found, assumes non-standard conlang.
+    
+    Args:
+    code (str): The ISO-639-1 code of the language.
+    
+    Returns:
+    str: The full name of the language or code if the code is not found.
+    """
+    languages = load_languages()
+    for language in languages:
+        if code.lower() == language['code']:
+            return language['name']
+    return code

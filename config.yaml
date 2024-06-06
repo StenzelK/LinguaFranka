@@ -1,8 +1,7 @@
-settings:
-  overwrite_sys_lang: false
-  language: pl
-  user_profile: "Zbycho_sob\xF3tka"
-
-
 api_keys:
   openai: your-openai-api-key
+settings:
+  overwrite_sys_lang: false
+  practice_lang: pl
+  user_lang: pl
+  user_profile: Default

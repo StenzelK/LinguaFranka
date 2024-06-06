@@ -1,0 +1,22 @@
+<!-- index.html -->
+{% extends 'base.html' %}
+
+{% block title %}
+{{ content.lang.title }}
+{% endblock %}
+
+{% block content %}
+<h1>{{ content.lang.current_language }}:
+    {% if content.practice_lang == 'Nolang' %}
+        {{content.lang.nolang}}
+    {% else %}
+        {{ content.practice_lang }}
+    {% endif %}
+</h1>
+
+<form action="/chooselang" method="POST">
+    <label for="language">{{ content.lang.choose_language }}:</label>
+    <input type="text" id="language" name="language" required>
+    <button type="submit">{{ content.lang.submit }}</button>
+</form>
+{% endblock %}

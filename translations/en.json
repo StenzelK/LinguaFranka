@@ -21,6 +21,14 @@
         "add_profile": "Add profile",
         "eg": "reading, traveling, cooking",  
         "submit": "Submit"  
+    },
+
+    "lang": {
+        "title": "LiguaFranka",
+        "current_language": "Current language",
+        "choose_language": "Choose a language to practice",
+        "nolang": "!Error! Unable to identify language from the input provided. Please ensure your input is in a recognizable language and try again.",
+        "submit": "Submit" 
     }
 
 }
