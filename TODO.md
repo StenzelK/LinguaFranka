@@ -36,6 +36,10 @@
    - **Difficulty: 2/5**
    - Develop a straightforward installation process that simplifies setup to a single-click action for users.
 
+9. **End-User Evaluation**
+   - **Difficulty: 1/5**
+   - Distribute the application to a select group of beta users to procure valuable insights and feedback.
+
 ## Bugs
 
 ### To Fix
