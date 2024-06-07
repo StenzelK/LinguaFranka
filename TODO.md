@@ -20,6 +20,18 @@
    - **Difficulty: 5/5**
    - Develop a real-time chat interface to facilitate interactive communication between users and the AI bot.
 
+5. **Chat Selection**
+   - **Difficulty: 2/5**
+   - Implement storage and selection for past chat instances
+
+6. **AI bots generation**
+   - **Difficulty:3/5**
+   - Implement a system for generating bot personalities based on practice language and user interest
+
+6. **Bot selection**
+   - **Difficulty: 2/5**
+   -Implement storage and selection of bots based on practice language
+
 5. **User Prompt Commentary**
    - **Difficulty: 3/5**
    - Implement a feature where the AI uses OpenAI's API to provide commentary on texts submitted by users.

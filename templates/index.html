@@ -4,7 +4,17 @@
 {% block title %}
 {{ content.index.title }}
 {% endblock %}
+{% block head %} 
+<link rel="stylesheet" href="/static/index.css">
+{% endblock %}
 
 {% block content %}
-<h1>{{ content.index.test_message }}</h1>
+<div id="chatBox"></div>
+<input type="text" id="inputField" placeholder="Type a message...">
+<button onclick="sendMessage()">{{content.index.send}}</button>
+<script>
+    // Expose the chatlog as a global variable
+    var chatlog = {{ chatlog | tojson }};
+</script>
+<script src="static/app.js"></script>
 {% endblock %}

@@ -1,0 +1,27 @@
+/* style.css */
+#chatBox {
+    width: 300px;       /* Fixed width */
+    height: 500px;      /* Fixed height, making it a tall rectangle */
+    border: 2px solid black; /* Solid black border */
+    overflow-y: auto;   /* Enables vertical scrolling if content overflows */
+    padding: 10px;      /* Padding inside the box */
+    background-color: #f9f9f9; /* Light grey background */
+}
+
+.chat-box {
+    width: 90%;
+    background-color: #f4f4f4; /* Light grey background for visibility */
+    padding: 10px;
+    margin-bottom: 10px; /* Adds space between chat boxes */
+    box-sizing: border-box;
+}
+
+.left-aligned {
+    text-align: left;
+    margin-left: 0; /* Aligns the box to the left */
+}
+
+.right-aligned {
+    text-align: right;
+    margin-left: auto; /* Pushes the box to the right */
+}

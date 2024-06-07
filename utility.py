@@ -239,3 +239,77 @@ def code_to_lang(code):
         if code.lower() == language['code']:
             return language['name']
     return code
+
+def get_chatlog_filename(directory, bot_name=None):
+    # List all files in the directory
+    files = os.listdir(directory)
+    # Filter files to count only those that match our naming scheme
+    count = sum(1 for file in files if file.startswith('chat') and file.endswith('.json'))
+    # Return the next file name
+    return f"chat{count + 1}.json"
+
+def append_chatlog(text, file_path, is_bot=False):
+    # Try to read the existing data from the file
+    try:
+        with open(file_path, 'r') as f:
+            data = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        data = {"log": []}  # Initialize with an empty log if file doesn't exist or is empty
+
+    # Append the new dictionary to the log list
+    app_dict = {"is_bot": is_bot, "message": text}
+    data["log"].append(app_dict)
+
+    # Write the updated data back to the file
+    with open(file_path, 'w') as f:
+        json.dump(data, f, indent=4)
+        
+        
+def get_context(file_path, n = 20):
+    
+    try:
+        with open(file_path, 'r') as f:
+            data = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError) as error:
+        print(f"Error reading the file: {error}")
+        return ""
+    
+    # Extract the log list
+    log_entries = data.get("log", [])
+    
+    total_entries = len(log_entries)
+    
+    # Calculate the starting index for n-th last entry
+    start_index = max(0, total_entries - n) if n > total_entries else 0
+    
+    # Extract messages from n-th last entry to the end
+    messages = [entry["message"] for entry in log_entries[start_index:]]
+    
+    # Compile the messages into a single string with clear separations
+    compiled_messages = " | ".join(messages)
+    
+    return compiled_messages
+
+def process_data(data):
+    
+    site_data=load_site_data()
+
+    practice_lang = code_to_lang(site_data["practice_lang"])
+    base_dir="chat_logs"
+    directory = os.path.join(base_dir, practice_lang)
+    
+    os.makedirs(directory, exist_ok=True)
+    file_name = 'log.json'
+    file_path = os.path.join(directory, file_name)
+    # Create and write default data to the file
+    append_chatlog(data, file_path)
+    context = get_context(file_path)
+    bot_response = gpt_get_chat_response(context)
+    append_chatlog(bot_response, file_path, is_bot=True)
+    
+    with open(file_path, 'r') as f:
+        
+        log = json.load(f)["log"]
+    
+    print(log)
+    return {"message": "Processed data", "chatlog": log}

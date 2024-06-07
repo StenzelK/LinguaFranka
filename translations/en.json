@@ -7,7 +7,7 @@
     },
     "index": {
         "title": "LiguaFranka",
-        "test_message": "Welcome to the Home Page"        
+        "send": "Send"        
     },
 
     "profile": {
