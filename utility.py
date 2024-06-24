@@ -1,7 +1,8 @@
 import json
 import locale
 import os
-from googletrans import Translator, LANGUAGES
+from API_keys import GOOGLE_CLOUD_API
+import httpx
 import yaml
 from GPT_tools import *
 
@@ -43,11 +44,6 @@ def get_global_translation(target_lang):
     blacklist = ('title')
 
     # Create a translator object
-    translator = Translator()
-
-    # Check if the target language is supported
-    if target_lang not in LANGUAGES:
-        raise ValueError(f"Unsupported language code: {target_lang}")
 
     # Load the JSON data
     with open(input_file_path, 'r', encoding='utf-8') as file:
@@ -58,7 +54,7 @@ def get_global_translation(target_lang):
         if isinstance(content, dict):
             return {k: (translate_content(v) if k not in blacklist else v) for k, v in content.items()}
         elif isinstance(content, str):
-            return translator.translate(content, dest=target_lang).text
+            return translate_string(content, target_lang).text
         return content
 
     # Translate the content
@@ -68,13 +64,14 @@ def get_global_translation(target_lang):
     with open(output_file_path, 'w', encoding='utf-8') as file:
         json.dump(translated_data, file, ensure_ascii=False, indent=4)
         
-def translate_string(string, lang):
+def translate_string(string, lang, api_key=GOOGLE_CLOUD_API):
     """
-    Translates a string into the specified language using googletrans library.
+    Translates a string into the specified language using Google Translate API via httpx.
 
     Args:
     string (str): The string to translate.
     lang (str): The ISO-639-1 code of the target language.
+    api_key (str): The API key for accessing Google Translate API.
 
     Returns:
     str: The translated text.
@@ -83,11 +80,30 @@ def translate_string(string, lang):
     ValueError: If the provided language code is unsupported.
     """
     
-    translator = Translator()
-    if lang not in LANGUAGES:
+    if any(d["code"] == lang for d in load_languages()):
         raise ValueError(f"Unsupported language code: {lang}")
-    
-    return translator.translate(string, dest=lang).text
+
+    url = "https://translation.googleapis.com/language/translate/v2"
+    headers = {
+        "Content-Type": "application/json"
+    }
+    params = {
+        "key": api_key
+    }
+    data = {
+        "q": string,
+        "target": lang
+    }
+
+    response = httpx.post(url, headers=headers, params=params, json=data)
+
+    if response.status_code == 200:
+        translation = response.json()
+        translated_text = translation["data"]["translations"][0]["translatedText"]
+        return translated_text
+    else:
+        raise Exception(f"Translation API request failed with status code {response.status_code}: {response.text}")
+
         
 def load_translations(site_lang):
     base_dir = 'translations'
@@ -241,6 +257,16 @@ def code_to_lang(code):
     return code
 
 def get_chatlog_filename(directory, bot_name=None):
+    """
+    Generate the next available chat log filename in the specified directory.
+
+    Parameters:
+    - directory (str): The directory where chat logs are stored.
+    - bot_name (str, optional): Name of the bot (not used in this function).
+
+    Returns:
+    - str: The next available chat log filename in the format "chatN.json".
+    """
     # List all files in the directory
     files = os.listdir(directory)
     # Filter files to count only those that match our naming scheme
@@ -248,7 +274,19 @@ def get_chatlog_filename(directory, bot_name=None):
     # Return the next file name
     return f"chat{count + 1}.json"
 
+
 def append_chatlog(text, file_path, is_bot=False):
+    """
+    Append a new chat message to the chat log file.
+
+    Parameters:
+    - text (str): The message text to append.
+    - file_path (str): The path to the chat log file.
+    - is_bot (bool): Flag indicating if the message is from the bot.
+
+    Returns:
+    - None
+    """
     # Try to read the existing data from the file
     try:
         with open(file_path, 'r') as f:
@@ -263,10 +301,19 @@ def append_chatlog(text, file_path, is_bot=False):
     # Write the updated data back to the file
     with open(file_path, 'w') as f:
         json.dump(data, f, indent=4)
-        
-        
-def get_context(file_path, n = 20):
-    
+
+
+def get_context(file_path, n=20):
+    """
+    Get the context of the chat from the last `n` messages in the chat log file.
+
+    Parameters:
+    - file_path (str): The path to the chat log file.
+    - n (int): The number of last messages to retrieve.
+
+    Returns:
+    - str: A single string containing the last `n` messages separated by " | ".
+    """
     try:
         with open(file_path, 'r') as f:
             data = json.load(f)
@@ -290,17 +337,28 @@ def get_context(file_path, n = 20):
     
     return compiled_messages
 
+
 def process_data(data):
-    
-    site_data=load_site_data()
+    """
+    Process the given data, append it to the chat log, generate a bot response,
+    and append the bot response to the chat log. Finally, return the chat log.
+
+    Parameters:
+    - data (str): The data/message to be processed.
+
+    Returns:
+    - dict: A dictionary containing the message and the updated chat log.
+    """
+    site_data = load_site_data()
 
     practice_lang = code_to_lang(site_data["practice_lang"])
-    base_dir="chat_logs"
+    base_dir = "chat_logs"
     directory = os.path.join(base_dir, practice_lang)
     
     os.makedirs(directory, exist_ok=True)
     file_name = 'log.json'
     file_path = os.path.join(directory, file_name)
+    
     # Create and write default data to the file
     append_chatlog(data, file_path)
     context = get_context(file_path)
@@ -308,7 +366,6 @@ def process_data(data):
     append_chatlog(bot_response, file_path, is_bot=True)
     
     with open(file_path, 'r') as f:
-        
         log = json.load(f)["log"]
     
     print(log)

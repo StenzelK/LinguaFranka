@@ -68,6 +68,10 @@
    - **Priority: Medium**
    - Implement validation for user profile inputs to prevent issues arising from malformed or malicious data entries.
 
+4. **Examples in profile submit form ot displaying correctly**
+   - **Priority: Low**
+   - Fix improper default texts in user profile submition form
+
 ## Considerations
 
 ### Potential Changes
