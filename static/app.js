@@ -1,12 +1,30 @@
-
 const ws = new WebSocket("ws://localhost:23335/ws");
 
+console.log("kurwa")
+ws.onopen = function(event) {
+    console.log("WebSocket is open now.");
+};
+
+ws.onclose = function(event) {
+    console.log("WebSocket is closed now.");
+};
+
+ws.onerror = function(event) {
+    console.error("WebSocket error observed:", event);
+};
 
 ws.onmessage = function(event) {
+    console.log("Called");
     const chatBox = document.getElementById('chatBox');
     const data = JSON.parse(event.data);
     const chatlog = data["chatlog"];
-    chatBox.innerHTML = `<p>${parseMessage(chatlog)}</p>`;
+    chatBox.innerHTML += `<p>${parseMessage(chatlog)}</p>`;
+    
+    // Use setTimeout to ensure the DOM is updated before scrolling
+    setTimeout(() => {
+        chatBox.scrollTop = chatBox.scrollHeight;
+        console.log("Scrolled");
+    }, 30);
 };
 
 function sendMessage() {
@@ -20,30 +38,20 @@ function sendMessage() {
     }
 }
 
-function  parseMessage(chatlog) {
-
-    parsedChat = '';
+function parseMessage(chatlog) {
+    let parsedChat = '';
     chatlog.forEach(function(message) {
-        
         if (message["is_bot"]) {
-
             parsedChat += `<div class="chat-box left-aligned">
-                    ${message["message"]}
-                    </div>`;
-
-        }  else {
-
+                ${message["message"]}
+            </div>`;
+        } else {
             parsedChat += `<div class="chat-box right-aligned">
                 ${message["message"]}
-                </div>`;
-
+            </div>`;
         }
-       
     });
-
     return parsedChat;
-
-
 }
 
 window.onload = function() {

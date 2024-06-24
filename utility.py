@@ -4,7 +4,7 @@ import os
 from API_keys import GOOGLE_CLOUD_API
 import httpx
 import yaml
-from GPT_tools import *
+from GPT_tools import gpt_guess_lang, gpt_get_chat_response, gpt_get_user_comment, gpt_get_bot_explanation
 import tiktoken
 
 
@@ -304,9 +304,6 @@ def append_chatlog(text, file_path, is_bot=False):
     with open(file_path, 'w') as f:
         json.dump(data, f, indent=4)
 
-
-import json
-import tiktoken
 def get_context_to_n(file_path, n=20):
     """
     Get the context of the chat from the last `n` messages in the chat log file.
@@ -408,6 +405,7 @@ def process_data(data):
     site_data = load_site_data()
 
     practice_lang = code_to_lang(site_data["practice_lang"])
+    user_profile = load_user_profile(site_data["user_profile"])
     base_dir = "chat_logs"
     directory = os.path.join(base_dir, practice_lang)
     
@@ -419,7 +417,7 @@ def process_data(data):
     append_chatlog(data, file_path)
     context = get_context_to_token_limit(file_path)
 
-    bot_response = gpt_get_chat_response(context)
+    bot_response = gpt_get_chat_response(context, practice_lang, user_profile)
     append_chatlog(bot_response, file_path, is_bot=True)
     
     with open(file_path, 'r') as f:
