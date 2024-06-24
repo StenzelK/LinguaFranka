@@ -35,12 +35,14 @@ def read_root(request: Request):
     file_name = 'log.json'
     file_path = os.path.join(directory, file_name)
     
-    with open(file_path, 'r') as f:
-        
-        log = json.load(f)
+    try:
+        with open(file_path, 'r') as f:
+            log = json.load(f)
+    except (IOError, json.JSONDecodeError):
+        log = {"log": []}
     
     content = nest_dictionaries(dicts_to_combine)
-    
+
     return templates.TemplateResponse("index.html",\
         {"request": request, "content": content, "chatlog": log})
     

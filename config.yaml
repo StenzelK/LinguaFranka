@@ -4,3 +4,5 @@ settings:
   user_lang: pl
   user_profile: Default
   auto_translate: false
+  overwrite_token_limit: false
+  user_token_limit: 3000

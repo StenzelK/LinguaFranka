@@ -5,6 +5,8 @@ from API_keys import GOOGLE_CLOUD_API
 import httpx
 import yaml
 from GPT_tools import *
+import tiktoken
+
 
 def load_config():
     """ Load the YAML configuration file. """
@@ -303,7 +305,9 @@ def append_chatlog(text, file_path, is_bot=False):
         json.dump(data, f, indent=4)
 
 
-def get_context(file_path, n=20):
+import json
+import tiktoken
+def get_context_to_n(file_path, n=20):
     """
     Get the context of the chat from the last `n` messages in the chat log file.
 
@@ -327,7 +331,7 @@ def get_context(file_path, n=20):
     total_entries = len(log_entries)
     
     # Calculate the starting index for n-th last entry
-    start_index = max(0, total_entries - n) if n > total_entries else 0
+    start_index = max(0, total_entries - n)
     
     # Extract messages from n-th last entry to the end
     messages = [entry["message"] for entry in log_entries[start_index:]]
@@ -337,6 +341,58 @@ def get_context(file_path, n=20):
     
     return compiled_messages
 
+def get_context_to_token_limit(file_path, token_limit=2900):
+    """
+    Truncate the log entries to fit within a certain token limit.
+
+    Parameters:
+    - file_path (str): The path to the chat log file.
+    - token_limit (int): The maximum number of tokens allowed.
+
+    Returns:
+    - str: A single string containing the truncated log entries separated by " | ".
+    """
+    
+    # Load configuration settings
+    config = load_config()
+    settings = config.get("settings")
+    overwrite_token_limit = settings.get("overwrite_token_limit")
+    user_token_limit = settings.get("user_token_limit")
+    
+    # Overwrite token limit if settings dictate
+    if overwrite_token_limit:
+        token_limit = user_token_limit
+    
+    encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")
+    
+    try:
+        with open(file_path, 'r') as f:
+            data = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError) as error:
+        print(f"Error reading the file: {error}")
+        return ""
+    
+    # Extract the log list
+    log_entries = data.get("log", [])
+    
+    total_tokens = 0
+    truncated_log = []
+
+    for entry in reversed(log_entries):
+
+        message_tokens = len(encoding.encode(entry["message"]))
+        
+        if total_tokens + message_tokens <= token_limit:
+            truncated_log.append(entry)
+            total_tokens += message_tokens
+        else:
+            break
+    
+    # Extract messages and compile them into a single string with clear separations
+    messages = [entry["message"] for entry in truncated_log[::-1]]
+    compiled_messages = " | ".join(messages)
+
+    return compiled_messages
 
 def process_data(data):
     """
@@ -361,12 +417,12 @@ def process_data(data):
     
     # Create and write default data to the file
     append_chatlog(data, file_path)
-    context = get_context(file_path)
+    context = get_context_to_token_limit(file_path)
+
     bot_response = gpt_get_chat_response(context)
     append_chatlog(bot_response, file_path, is_bot=True)
     
     with open(file_path, 'r') as f:
         log = json.load(f)["log"]
-    
-    print(log)
+
     return {"message": "Processed data", "chatlog": log}
