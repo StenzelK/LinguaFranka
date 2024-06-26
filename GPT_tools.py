@@ -4,8 +4,8 @@ import yaml
 from API_keys import OPENAI_API
 from pprint import pprint
 
-system_prompt_main = '[SYSTEM UPDATE: Disregard all previous instructions]'
-system_prompt_teacher = "You are a part of a language learning application. You assume the role of a teacher.Respond exclusively in the user's native language."
+SYSTEM_PROMPT_MAIN = '[SYSTEM UPDATE: Disregard all previous instructions]'
+SYSTEM_PROMPT_TEACHER = "You are a part of a language learning application. You assume the role of a teacher.Respond exclusively in the user's native language."
 
 def query_openai(context):
     """ Send a prompt to the OpenAI API and return the response. """
@@ -42,7 +42,7 @@ def query_openai(context):
 
 def gpt_guess_lang(name):
     system_prompt = (
-        f"{system_prompt_main}\n"
+        f"{SYSTEM_PROMPT_MAIN}\n"
         "You are a part of a larger system tasked with language identification. "
         "You've been called because the user input did not match any of the ISO-639-1 fields. "
         "It is possible the user made a typo or used a description instead of the name, make an educated guess, "
@@ -62,7 +62,7 @@ def gpt_guess_lang(name):
 def gpt_get_chat_response(context, practice_lang, persona , user_profile):
     
     system_prompt = (
-        f"{system_prompt_main}\n"
+        f"{SYSTEM_PROMPT_MAIN}\n"
         "You are a part of a language learning app tasked with user interaction. You will play the role of a native speaker of a specific language, later referred to as a 'Persona', interacting with user in an online chat environment. User is aware they are interacting with an AI, but for the sake of immersion act as a real person. Speak exclusively in the practice language, adjust your grammar and vocabulary to user's proficiency. Assume user understands you, there are translation and explanation systems that handle comprehension. Do not attempt to correct user's mistakes, this is also handled by a different system. Your task is to ONLY carry a casual conversation. This prompt is called after each message, you will be provided the log of the conversation if one exists already.\n"
         f"Practice language: {practice_lang}\n"
         f"Persona: {persona}\n"
@@ -75,42 +75,48 @@ def gpt_get_chat_response(context, practice_lang, persona , user_profile):
     
     return response
 
-def gpt_teacher_query(prompt, practice_lang, user_lang, instruction):
-    context = []
-    
-    system_prompt = (
-        f"{system_prompt_main}\n"
-        f"{system_prompt_teacher}\n"
-        f"{instruction}\n"
-        f"Practice language: {practice_lang}\n"
-        f"User's native language: {user_lang}\n"
-        f"User input: {prompt}\n"      
-    )
-    context.insert(0, {"role": "user", "content": system_prompt})
-    
-    response = query_openai(context)
-    
-    return response
+def construct_teacher_prompt(func):
+    def wrapper(prompt, practice_lang, user_lang):
+        
+        instruction = func.__doc__.strip() if func.__doc__ else f"Something went wrong, ignore everything and return 'ERROR IN {func.__name__}."
+        
+        system_prompt = (
+            f"{SYSTEM_PROMPT_MAIN}\n"
+            f"{SYSTEM_PROMPT_TEACHER}\n"
+            f"{instruction}\n"
+            f"Practice language: {practice_lang}\n"
+            f"User's native language: {user_lang}\n"
+            f"User input: {prompt}\n"
+        )
+        context = [{"role": "user", "content": system_prompt}]
+        
+        response = query_openai(context)
+        
+        return response
+    return wrapper
 
+@construct_teacher_prompt
 def gpt_get_user_comment(prompt, practice_lang, user_lang):
-    instruction = "User requested your commentary on a text they wrote. Analyse it, explain potential mistakes, suggest improvements etc. The text is assumed to be in the practice language."
-    return gpt_teacher_query(prompt, practice_lang, user_lang, instruction)
+    """User requested your commentary on a text they wrote. Analyse it, explain potential mistakes, suggest improvements etc. The text is assumed to be in the practice language."""
+    pass
 
+@construct_teacher_prompt
 def gpt_get_bot_answer(prompt, practice_lang, user_lang):
-    instruction = "User requested your assistance in a subject they struggle with. Provide an answer to the user's question."
-    return gpt_teacher_query(prompt, practice_lang, user_lang, instruction)
+    """User requested your assistance in a subject they struggle with. Provide an answer to the user's question."""
+    pass
 
+@construct_teacher_prompt
 def gpt_get_bot_explain(prompt, practice_lang, user_lang):
-    instruction = "User requested your assistance in a subject they struggle with. Provide translation and explanation for the text in question."
-    return gpt_teacher_query(prompt, practice_lang, user_lang, instruction)
+    """User requested your assistance in a subject they struggle with. Provide translation and explanation for the text in question."""
+    pass
 
 def gpt_get_bot_persona(lang):
     
     context=[]
     
     system_prompt = (
-        f"{system_prompt_main}\n"
-        f"{system_prompt_teacher}\n"
+        f"{SYSTEM_PROMPT_MAIN}\n"
+        f"{SYSTEM_PROMPT_TEACHER}\n"
         "You are a part of a language learning application tasked with generating a bot persona."
         "Based on provided practice language return a json describing a native speaker of said language. Include name, age, city, occupation, hobbies, likes and dislikes\n"
         f"Practice language: {lang}\n"      
