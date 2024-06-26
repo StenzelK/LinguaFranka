@@ -277,7 +277,7 @@ def get_chatlog_filename(directory, bot_name=None):
     return f"chat{count + 1}.json"
 
 
-def append_chatlog(text, file_path, is_bot=False):
+def append_chatlog(text, file_path, role):
     """
     Append a new chat message to the chat log file.
 
@@ -297,7 +297,7 @@ def append_chatlog(text, file_path, is_bot=False):
         data = {"log": []}  # Initialize with an empty log if file doesn't exist or is empty
 
     # Append the new dictionary to the log list
-    app_dict = {"is_bot": is_bot, "message": text}
+    app_dict = {"role": role, "message": text}
     data["log"].append(app_dict)
 
     # Write the updated data back to the file
@@ -338,6 +338,9 @@ def get_context_to_n(file_path, n=20):
     
     return compiled_messages
 
+import json
+import tiktoken
+
 def get_context_to_token_limit(file_path, token_limit=2900):
     """
     Truncate the log entries to fit within a certain token limit.
@@ -347,7 +350,7 @@ def get_context_to_token_limit(file_path, token_limit=2900):
     - token_limit (int): The maximum number of tokens allowed.
 
     Returns:
-    - str: A single string containing the truncated log entries separated by " | ".
+    - dict: A dictionary containing the truncated log entries in the specified format.
     """
     
     # Load configuration settings
@@ -367,7 +370,7 @@ def get_context_to_token_limit(file_path, token_limit=2900):
             data = json.load(f)
     except (FileNotFoundError, json.JSONDecodeError) as error:
         print(f"Error reading the file: {error}")
-        return ""
+        return {"messages": []}
     
     # Extract the log list
     log_entries = data.get("log", [])
@@ -385,11 +388,13 @@ def get_context_to_token_limit(file_path, token_limit=2900):
         else:
             break
     
-    # Extract messages and compile them into a single string with clear separations
-    messages = [entry["message"] for entry in truncated_log[::-1]]
-    compiled_messages = " | ".join(messages)
+    # Format the truncated log entries as required
+    formatted_log = [
+        {"role": entry["role"], "content": entry["message"]}
+        for entry in truncated_log[::-1]
+    ]
 
-    return compiled_messages
+    return formatted_log
 
 def process_data(data):
     """
@@ -414,11 +419,12 @@ def process_data(data):
     file_path = os.path.join(directory, file_name)
     
     # Create and write default data to the file
-    append_chatlog(data, file_path)
+    append_chatlog(data, file_path, role='user')
     context = get_context_to_token_limit(file_path)
 
-    bot_response = gpt_get_chat_response(context, practice_lang, user_profile)
-    append_chatlog(bot_response, file_path, is_bot=True)
+    bot_response = gpt_get_chat_response(context, practice_lang, "DEBUG", user_profile)
+    print(f'Bot response: {bot_response}')
+    append_chatlog(bot_response, file_path, role='system')
     
     with open(file_path, 'r') as f:
         log = json.load(f)["log"]
