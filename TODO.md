@@ -11,14 +11,18 @@
 2. **OpenAI API Integration**
    - **Difficulty: 4/5**
    - Integrate the application with OpenAI's API to enhance interaction capabilities using advanced artificial intelligence features.
+   - **DONE**
+
 
 3. **Implement GPT Placeholders**
    - **Difficulty: 3/5**
    - Transition from placeholder functions to actual API calls to the OpenAI service for dynamic responses.
+   - **DONE**
 
 4. **Chat Functionality**
    - **Difficulty: 5/5**
    - Develop a real-time chat interface to facilitate interactive communication between users and the AI bot.
+   - **DONE**
 
 5. **Chat Selection**
    - **Difficulty: 2/5**
@@ -26,7 +30,8 @@
 
 6. **AI bots generation**
    - **Difficulty:3/5**
-   - Implement a system for generating bot personalities based on practice language and user interest
+   - Implement a system for generating bot personalities based on practice language and user interest-
+   - **50% DONE**
 
 6. **Bot selection**
    - **Difficulty: 2/5**
@@ -51,6 +56,10 @@
 9. **End-User Evaluation**
    - **Difficulty: 1/5**
    - Distribute the application to a select group of beta users to procure valuable insights and feedback.
+
+10. **Rebuild auto-translate**
+   - **Difficulty: 2/5**
+   - Googletrans and openai modules conflict in httpx version, rewrite auto-translate using GCP 
 
 ## Bugs
 
@@ -79,6 +88,10 @@
 1. **Remove `user_lang` from Config**
    - **Consideration: Redundancy?**
    - Evaluate the redundancy of `user_lang` in the config, considering the possibility of using `native_language` from user profiles instead.
+
+2. **Refactor GPT_Tools**
+   - **Consideration: Potential name conflicts**
+   - Consts in GPT_tools.py are global and may cause namespace issues. Refactor to OOP?
    
 ### Additional features
 
