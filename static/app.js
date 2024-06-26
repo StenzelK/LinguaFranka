@@ -1,6 +1,5 @@
 const ws = new WebSocket("ws://localhost:23335/ws");
 
-console.log("kurwa")
 ws.onopen = function(event) {
     console.log("WebSocket is open now.");
 };
@@ -18,7 +17,7 @@ ws.onmessage = function(event) {
     const chatBox = document.getElementById('chatBox');
     const data = JSON.parse(event.data);
     const chatlog = data["chatlog"];
-    chatBox.innerHTML += `<p>${parseMessage(chatlog)}</p>`;
+    chatBox.innerHTML = `<p>${parseMessage(chatlog)}</p>`;
     
     // Use setTimeout to ensure the DOM is updated before scrolling
     setTimeout(() => {
@@ -41,7 +40,7 @@ function sendMessage() {
 function parseMessage(chatlog) {
     let parsedChat = '';
     chatlog.forEach(function(message) {
-        if (message["is_bot"]) {
+        if (message["role"]=='system') {
             parsedChat += `<div class="chat-box left-aligned">
                 ${message["message"]}
             </div>`;
