@@ -4,7 +4,7 @@ import os
 from API_keys import GOOGLE_CLOUD_API
 import httpx
 import yaml
-from GPT_tools import gpt_guess_lang, gpt_get_chat_response, gpt_get_user_comment, gpt_get_bot_explanation
+from GPT_tools import gpt_guess_lang, gpt_get_chat_response, gpt_get_user_comment, gpt_get_bot_explain, gpt_get_bot_answer
 import tiktoken
 
 
@@ -338,9 +338,6 @@ def get_context_to_n(file_path, n=20):
     
     return compiled_messages
 
-import json
-import tiktoken
-
 def get_context_to_token_limit(file_path, token_limit=2900):
     """
     Truncate the log entries to fit within a certain token limit.
@@ -396,17 +393,37 @@ def get_context_to_token_limit(file_path, token_limit=2900):
 
     return formatted_log
 
+
 def process_data(data):
     """
-    Process the given data, append it to the chat log, generate a bot response,
+    Process the given data based on its type.
+
+    Parameters:
+    - data (dict): The data/message to be processed.
+
+    Returns:
+    - dict: A dictionary containing the processed result.
+    """
+    if data['type'] == 'message':
+        return handle_message(data['content'])
+    elif data['type'] == 'question':
+        return handle_question(data['content'])
+    else:
+        raise ValueError("Unknown data type")
+
+def handle_message(content):
+    """
+    Process a chat message, append it to the chat log, generate a bot response,
     and append the bot response to the chat log. Finally, return the chat log.
 
     Parameters:
-    - data (str): The data/message to be processed.
+    - content (str): The message content to be processed.
 
     Returns:
     - dict: A dictionary containing the message and the updated chat log.
     """
+    
+    print(f'Content: {content}')
     site_data = load_site_data()
 
     practice_lang = code_to_lang(site_data["practice_lang"])
@@ -419,7 +436,7 @@ def process_data(data):
     file_path = os.path.join(directory, file_name)
     
     # Create and write default data to the file
-    append_chatlog(data, file_path, role='user')
+    append_chatlog(content, file_path, role='user')
     context = get_context_to_token_limit(file_path)
 
     bot_response = gpt_get_chat_response(context, practice_lang, "DEBUG", user_profile)
@@ -429,4 +446,17 @@ def process_data(data):
     with open(file_path, 'r') as f:
         log = json.load(f)["log"]
 
-    return {"message": "Processed data", "chatlog": log}
+    return {"type": "message", "message": "Processed data", "chatlog": log}
+
+def handle_question(content):
+    """
+    Handle a question by simply acknowledging it without processing.
+
+    Parameters:
+    - content (str): The question content.
+
+    Returns:
+    - dict: A dictionary acknowledging the question.
+    """
+
+    return {"type": "question", "message": "Question received"}

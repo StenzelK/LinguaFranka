@@ -107,7 +107,9 @@ def gpt_get_bot_answer(prompt, practice_lang, user_lang):
 
 @construct_teacher_prompt
 def gpt_get_bot_explain(prompt, practice_lang, user_lang):
-    """User requested your assistance in a subject they struggle with. Provide translation and explanation for the text in question."""
+    """User requested your assistance in a subject they struggle with. You will be provided with an AI generated text. User has troubles understanding it. Respond in two blocks:
+        Text translated to user's native language
+        Explain the grammatical features in the text."""
     pass
 
 def gpt_get_bot_persona(lang):
