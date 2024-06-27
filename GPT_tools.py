@@ -85,7 +85,7 @@ def construct_teacher_prompt(func):
             f"{SYSTEM_PROMPT_TEACHER}\n"
             f"{instruction}\n"
             #f"Practice language: {practice_lang}\n"
-            f"User's native language: {user_lang}\n"
+            f"Reply in: {user_lang}\n"
             f"User input: {prompt}\n"
         )
         context = [{"role": "user", "content": system_prompt}]
@@ -97,7 +97,7 @@ def construct_teacher_prompt(func):
 
 @construct_teacher_prompt
 def gpt_get_user_comment(prompt, practice_lang, user_lang):
-    """User requested your commentary on a text they wrote. Analyse it, explain potential mistakes, suggest improvements etc. The text is assumed to be in the practice language."""
+    """User requested your commentary on a text they wrote. Analyse it, point out and explain potential mistakes (gramatical, orthographical, typos etc. be pedantic), suggest improvements etc. The text is assumed to be in the practice language."""
     pass
 
 @construct_teacher_prompt
