@@ -66,6 +66,25 @@ def get_global_translation(target_lang):
     with open(output_file_path, 'w', encoding='utf-8') as file:
         json.dump(translated_data, file, ensure_ascii=False, indent=4)
         
+def load_languages():
+    """
+    Loads language data from a JSON file located in the static directory.
+    
+    Returns:
+    list: A list of dictionaries, where each dictionary contains a 'code' and a 'name' of a language.
+    """
+    try:
+        with open('static/ISO-639-1-language.json', 'r') as file:
+            languages = json.load(file)
+            return languages
+    except FileNotFoundError:
+        print("The language file could not be found.")
+        return []
+    except json.JSONDecodeError:
+        print("The language file is not in proper JSON format.")
+        return []
+
+        
 def translate_string(string, lang, api_key=GOOGLE_CLOUD_API):
     """
     Translates a string into the specified language using Google Translate API via httpx.
@@ -191,23 +210,6 @@ def update_practice_language(language):
     with open(file_path, 'w') as file:
         yaml.safe_dump(config, file)
         
-def load_languages():
-    """
-    Loads language data from a JSON file located in the static directory.
-    
-    Returns:
-    list: A list of dictionaries, where each dictionary contains a 'code' and a 'name' of a language.
-    """
-    try:
-        with open('static/ISO-639-1-language.json', 'r') as file:
-            languages = json.load(file)
-            return languages
-    except FileNotFoundError:
-        print("The language file could not be found.")
-        return []
-    except json.JSONDecodeError:
-        print("The language file is not in proper JSON format.")
-        return []
 
 def lang_to_code(name, failover=False, depth=0):
     """
@@ -229,7 +231,7 @@ def lang_to_code(name, failover=False, depth=0):
     str: The first matching ISO-639-1 code or "NoLang" if no match is found.
     """
     name = name.lower()
-    name = translate_string(name, "en")
+    #name = translate_string(name, "en")
     languages = load_languages()
     for language in languages:
         if name in language['name'].lower():
@@ -464,7 +466,7 @@ def handle_question(content):
     site_data = load_site_data()
 
     practice_lang = code_to_lang(site_data["practice_lang"])
-    user_lang = site_data["site_lang"]
+    user_lang = code_to_lang(site_data["site_lang"])
     
     answer = gpt_get_bot_answer(content, practice_lang, user_lang)
     print(f'Answer: {answer}')
@@ -485,14 +487,14 @@ def handle_explain(content):
     site_data = load_site_data()
 
     practice_lang = code_to_lang(site_data["practice_lang"])
-    user_lang = site_data["site_lang"]
+    user_lang = code_to_lang(site_data["site_lang"])
     print(f'User: {user_lang}')
     
     if content['role'] == 'system':
         
-        explanation = gpt_get_bot_explain(content, practice_lang, user_lang)
+        explanation = gpt_get_bot_explain(content['message'], practice_lang, user_lang)
     else:
-        explanation = gpt_get_user_comment(content, practice_lang, user_lang)
+        explanation = gpt_get_user_comment(content['message'], practice_lang, user_lang)
     
     
     print(f'Explanation: {explanation}')
