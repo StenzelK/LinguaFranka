@@ -155,9 +155,10 @@ def load_site_data():
     site_lang = get_system_language_iso_639_1() if not settings["overwrite_sys_lang"] else settings["user_lang"]
     user_profile = settings["user_profile"]
     practice_lang = settings["practice_lang"]
+    practice_lang_prof = settings["practice_lang_prof"]
     
     
-    return {"config": config, "settings": settings, "site_lang": site_lang, "user_profile": user_profile, "practice_lang": practice_lang}
+    return {"config": config, "settings": settings, "site_lang": site_lang, "user_profile": user_profile, "practice_lang": practice_lang, "practice_lang_prof": practice_lang_prof}
 
 def load_user_profile(profile):
     base_dir = 'user_profiles'
@@ -197,7 +198,7 @@ def update_user_profile(new_profile):
     with open(file_path, 'w') as file:
         yaml.safe_dump(config, file)
         
-def update_practice_language(language):
+def update_practice_language(language, practice_lang_prof):
     file_path = "config.yaml"
     with open(file_path, 'r') as file:
         config = yaml.safe_load(file)
@@ -205,6 +206,7 @@ def update_practice_language(language):
     code = lang_to_code(language)
     # Update the practice_lang
     config['settings']['practice_lang'] = code
+    config['settings']['practice_lang_prof'] = practice_lang_prof
     
     # Write the updated data back to the file
     with open(file_path, 'w') as file:
@@ -432,6 +434,7 @@ def handle_message(content):
 
     practice_lang = code_to_lang(site_data["practice_lang"])
     user_profile = load_user_profile(site_data["user_profile"])
+    practice_lang_prof = site_data["practice_lang_prof"]
     base_dir = "chat_logs"
     directory = os.path.join(base_dir, practice_lang)
     
@@ -443,7 +446,7 @@ def handle_message(content):
     append_chatlog(content, file_path, role='user')
     context = get_context_to_token_limit(file_path)
 
-    bot_response = gpt_get_chat_response(context, practice_lang, "DEBUG", user_profile)
+    bot_response = gpt_get_chat_response(context, practice_lang, "DEBUG", user_profile, practice_lang_prof)
     print(f'Bot response: {bot_response}')
     append_chatlog(bot_response, file_path, role='system')
     

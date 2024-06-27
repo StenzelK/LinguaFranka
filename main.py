@@ -243,7 +243,7 @@ async def add_user_profile(name: str = Form(...), age: int = Form(...),
         raise e
 
 @app.post("/chooselang")
-async def choose_language(language: str = Form(...)):
+async def choose_language(language: str = Form(...), practice_lang_prof: str = Form(...)):
     """
     Endpoint to handle language choice from a form.
 

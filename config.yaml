@@ -1,8 +1,9 @@
 settings:
+  auto_translate: false
   overwrite_sys_lang: false
-  practice_lang: pl
+  overwrite_token_limit: false
+  practice_lang: de
+  practice_lang_prof: beginner
   user_lang: pl
   user_profile: Default
-  auto_translate: false
-  overwrite_token_limit: false
   user_token_limit: 3000

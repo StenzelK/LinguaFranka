@@ -17,6 +17,16 @@
 <form action="/chooselang" method="POST">
     <label for="language">{{ content.lang.choose_language }}:</label>
     <input type="text" id="language" name="language" required>
+    <label for="language">Declare your proficiency:</label>
+    <select id="language-proficiency" name="language-proficiency">
+        <option value="beginner" selected>Beginner</option>
+        <option value="elementary">Elementary</option>
+        <option value="intermediate">Intermediate</option>
+        <option value="upper-intermediate">Upper Intermediate</option>
+        <option value="advanced">Advanced</option>
+        <option value="proficient">Proficient</option>
+        <option value="native">Native</option>
+      </select>
     <button type="submit">{{ content.lang.submit }}</button>
 </form>
 {% endblock %}

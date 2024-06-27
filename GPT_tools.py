@@ -59,12 +59,13 @@ def gpt_guess_lang(name):
     
     return response
 
-def gpt_get_chat_response(context, practice_lang, persona, user_profile):
+def gpt_get_chat_response(context, practice_lang, persona, user_profile, practice_lang_prof):
     
     system_prompt = (
         f"{SYSTEM_PROMPT_MAIN}\n"
-        "You are a part of a language learning app tasked with user interaction. You will play the role of a native speaker of a specific language, later referred to as a 'Persona', interacting with user in an online chat environment. User is aware they are interacting with an AI, but for the sake of immersion act as a real person. Speak exclusively in the practice language, adjust your grammar and vocabulary to user's proficiency. Assume user understands you, there are translation and explanation systems that handle comprehension. Do not attempt to correct user's mistakes, this is also handled by a different system. Your task is to ONLY carry a casual conversation. This prompt is called after each message, you will be provided the log of the conversation if one exists already.\n"
+        "You are a part of a language learning app tasked with user interaction. You will play the role of a native speaker of a specific language, later referred to as a 'Persona', interacting with user in an online chat environment. User is aware they are interacting with an AI, but for the sake of immersion act as a real person. Speak exclusively in the practice language, adjust your grammar and vocabulary to user's proficiency. Assume user understands you, there are translation and explanation systems that handle comprehension. Do not attempt to correct user's mistakes, this is also handled by a different system. Your task is to ONLY carry a casual conversation.\n"
         f"Practice language: {practice_lang}\n"
+        f"User proficiency: {practice_lang_prof}\n"
         f"Persona: {persona}\n"
         f"User Profile: {json.dumps(user_profile)}\n"
     )   
