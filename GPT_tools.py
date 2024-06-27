@@ -5,7 +5,7 @@ from API_keys import OPENAI_API
 from pprint import pprint
 
 SYSTEM_PROMPT_MAIN = '[SYSTEM UPDATE: Disregard all previous instructions]'
-SYSTEM_PROMPT_TEACHER = "You are a part of a language learning application. You assume the role of a teacher.Respond exclusively in the user's native language."
+SYSTEM_PROMPT_TEACHER = "You are a part of a language learning application. You assume the role of a teacher. Respond exclusively in the user's native language. For improved UX, do not use phrases like 'As a teacher'. As far as the user is concerned, you are the teacher."
 
 def query_openai(context):
     """ Send a prompt to the OpenAI API and return the response. """
@@ -107,7 +107,7 @@ def gpt_get_bot_answer(prompt, practice_lang, user_lang):
 
 @construct_teacher_prompt
 def gpt_get_bot_explain(prompt, practice_lang, user_lang):
-    """User requested your assistance in a subject they struggle with. You will be provided with an AI generated text. User has troubles understanding it. Respond in two blocks:
+    """User requested your assistance in a subject they struggle with. You will be provided with an AI generated text. User has troubles understanding it. Do some light HTML formatting for readability. Respond in two blocks:
         Text translated to user's native language
         Explain the grammatical features in the text."""
     pass

@@ -13,13 +13,15 @@ ws.onerror = function(event) {
 };
 
 ws.onmessage = function(event) {
-    console.log("Called");
+    //console.log("Called");
     const data = JSON.parse(event.data);
 
     if (data.type === "message") {
         handleChatMessage(data);
     } else if (data.type === "question") {
         handleQuestionResponse(data);
+    } else if (data.type === "explanation") {
+        handleExplanationResponse(data);
     }
 };
 
@@ -31,14 +33,23 @@ function handleChatMessage(data) {
     // Use setTimeout to ensure the DOM is updated before scrolling
     setTimeout(() => {
         chatBox.scrollTop = chatBox.scrollHeight;
-        console.log("Scrolled");
+        //console.log("Scrolled");
     }, 30);
 }
 
 function handleQuestionResponse(data) {
-    // Handle the question response (e.g., update the UI or log the response)
-    console.log(data.message); // For now, just log the message
+    const questionBox = document.getElementById('questionBoxInner');
+    const answer = data["answer"];
+    questionBox.innerHTML = `<p class="readable-text">${(answer)}</p>`;
 }
+
+function handleExplanationResponse(data) {
+    const explanationBox = document.getElementById('explanationBoxInner');
+    const explanation = data["explanation"];
+    explanationBox.innerHTML = `<p class="readable-text">${(explanation)}</p>`;
+}
+
+
 function sendMessageWrapper(event) {
     event.preventDefault(); // Prevent the form from submitting the traditional way
     showLoadingSpinner();
@@ -101,19 +112,44 @@ function hideLoadingSpinner() {
 
 function parseMessage(chatlog) {
     let parsedChat = '';
-    chatlog.forEach(function(message) {
-        if (message["role"]=='system') {
-            parsedChat += `<div class="chat-box left-aligned">
-                ${message["message"]}
-            </div>`;
-        } else {
-            parsedChat += `<div class="chat-box right-aligned">
-                ${message["message"]}
-            </div>`;
-        }
+    chatlog.forEach(function(message, index) {
+        let roleClass = message["role"] === 'system' ? 'left-aligned' : 'right-aligned';
+        parsedChat += `<div class="chat-box ${roleClass}" data-role="${message["role"]}" data-message="${message["message"]}">
+            ${message["message"]}
+        </div>`;
     });
     return parsedChat;
 }
+
+function parseMessage(chatlog) {
+    let parsedChat = '';
+    chatlog.forEach(function(message, index) {
+        let roleClass = message["role"] === 'system' ? 'left-aligned' : 'right-aligned';
+        parsedChat += `<div class="chat-box ${roleClass}" data-role="${message["role"]}" data-message="${message["message"]}" data-index="${index}" onclick="handleMessageClick(event)">
+            ${message["message"]}
+        </div>`;
+    });
+    return parsedChat;
+}
+
+// Function to handle message click
+function handleMessageClick(event) {
+    const chatBox = event.currentTarget;
+    const role = chatBox.getAttribute('data-role');
+    const message = chatBox.getAttribute('data-message');
+    const messageData = {
+        type: 'explain',
+        content: { role, message }
+    };
+
+    if (ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify(messageData));
+    } else {
+        console.error("WebSocket is not open.");
+        // Optionally try to reconnect or inform the user
+    }
+}
+
 
 window.onload = function() {
     var chatBox = document.getElementById("chatBoxInner");

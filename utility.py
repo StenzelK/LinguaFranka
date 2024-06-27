@@ -408,6 +408,8 @@ def process_data(data):
         return handle_message(data['content'])
     elif data['type'] == 'question':
         return handle_question(data['content'])
+    elif data['type'] == 'explain':
+        return handle_explain(data['content'])
     else:
         raise ValueError("Unknown data type")
 
@@ -458,5 +460,41 @@ def handle_question(content):
     Returns:
     - dict: A dictionary acknowledging the question.
     """
+    print(f'Content {content}')
+    site_data = load_site_data()
 
-    return {"type": "question", "message": "Question received"}
+    practice_lang = code_to_lang(site_data["practice_lang"])
+    user_lang = site_data["site_lang"]
+    
+    answer = gpt_get_bot_answer(content, practice_lang, user_lang)
+    print(f'Answer: {answer}')
+
+    return {"type": "question", "message": "Question received", "answer": answer}
+
+def handle_explain(content):
+    """
+    Handle a question by simply acknowledging it without processing.
+
+    Parameters:
+    - content (str): The question content.
+
+    Returns:
+    - dict: A dictionary acknowledging the question.
+    """
+    print(f'Content {content}')
+    site_data = load_site_data()
+
+    practice_lang = code_to_lang(site_data["practice_lang"])
+    user_lang = site_data["site_lang"]
+    print(f'User: {user_lang}')
+    
+    if content['role'] == 'system':
+        
+        explanation = gpt_get_bot_explain(content, practice_lang, user_lang)
+    else:
+        explanation = gpt_get_user_comment(content, practice_lang, user_lang)
+    
+    
+    print(f'Explanation: {explanation}')
+
+    return {"type": "explanation", "message": "Question received", "explanation": explanation}

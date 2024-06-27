@@ -271,28 +271,35 @@ async def choose_language(language: str = Form(...)):
 #-------------Chat util--------------#
 ######################################
 
+
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
     try:
         while True:
-            data = await websocket.receive_text()
             try:
+                data = await websocket.receive_text()
                 data_json = json.loads(data)  # Parse the incoming string to a dictionary
             except json.JSONDecodeError as e:
                 logger.error(f"Failed to decode JSON: {e}")
                 await websocket.send_json({"type": "error", "message": "Invalid JSON format"})
                 continue
+            except WebSocketDisconnect:
+                logger.info("WebSocket was disconnected.")
+                break  # Exit the loop if the WebSocket is disconnected
+            
             print(f'Data: {type(data_json)} {data_json}')
             response_data = process_data(data_json)  # Ensure this function does not throw unhandled exceptions
+            print(f'Response: {type(response_data)} {response_data}')
             await websocket.send_json(response_data)
-    except WebSocketDisconnect:
-        logger.info("WebSocket was disconnected.")
     except Exception as e:
         logger.error(f"Error: {e}")
     finally:
         if websocket.application_state == WebSocketState.CONNECTED:
-            logger.info("Closing WebSocket connection.")
-            await websocket.close()
+            try:
+                logger.info("Closing WebSocket connection.")
+                await websocket.close()
+            except RuntimeError as e:
+                logger.error(f"Error while closing WebSocket: {e}")
         else:
             logger.info("WebSocket already closed.")

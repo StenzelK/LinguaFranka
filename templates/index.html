@@ -10,10 +10,12 @@
 
 {% block content %}
 <div id="mainContainer">
-    <div id="teacherBox"></div>
+    <div id="teacherBox">
+        <div id="explanationBoxInner"></div>
+    </div>
 
     <div id="chatBox">
-        <div id="chatBoxTitle">Chat Box Title/Disclaimer</div>
+        <div id="chatBoxTitle">Remember: Everything the bot says is made up!</div>
         <div id="chatBoxInner"></div>
         <form class="input-container" onsubmit="sendMessageWrapper(event)">
             <input type="text" id="inputField" placeholder="Type a message...">
@@ -24,7 +26,8 @@
 
 
     <div id="questionBox">
-        <form class="input-container" onsubmit="submitQuestion(event)">
+        <div id="questionBoxInner"></div>
+        <form class="input-container" onsubmit="submitQuestionWrapper(event)">
             <input type="text" id="questionField" placeholder="Type your question...">
             <button type="submit">Ask</button>
             <div id="questionLoadingSpinner" class="spinner" style="display: none;"></div>
