@@ -59,7 +59,7 @@ def gpt_guess_lang(name):
     
     return response
 
-def gpt_get_chat_response(context, practice_lang, persona , user_profile):
+def gpt_get_chat_response(context, practice_lang, persona, user_profile):
     
     system_prompt = (
         f"{SYSTEM_PROMPT_MAIN}\n"
@@ -97,7 +97,7 @@ def construct_teacher_prompt(func):
 
 @construct_teacher_prompt
 def gpt_get_user_comment(prompt, practice_lang, user_lang):
-    """User requested your commentary on a text they wrote. Analyse it, point out and explain potential mistakes (gramatical, orthographical, typos etc. be pedantic), suggest improvements etc. The text is assumed to be in the practice language."""
+    """User requested your commentary on a text they wrote. Analyse it, point out and explain potential mistakes (gramatical, orthographical, typos etc.), suggest improvements etc. The text is assumed to be in the practice language."""
     pass
 
 @construct_teacher_prompt
