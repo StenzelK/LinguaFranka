@@ -61,6 +61,10 @@
    - **Difficulty: 2/5**
    - Googletrans and openai modules conflict in httpx version, rewrite auto-translate using GCP 
 
+11. **Add new texts to the auto-translate json file**
+   - **Difficulty: 1/5**
+   - Move the fixed demo text to auto-translate once it's fixed
+
 ## Bugs
 
 ### To Fix
