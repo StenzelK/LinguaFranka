@@ -9,9 +9,29 @@
 {% endblock %}
 
 {% block content %}
-<div id="chatBox"></div>
-<input type="text" id="inputField" placeholder="Type a message...">
-<button onclick="sendMessage()">{{content.index.send}}</button>
+<div id="mainContainer">
+    <div id="teacherBox"></div>
+
+    <div id="chatBox">
+        <div id="chatBoxTitle">Chat Box Title/Disclaimer</div>
+        <div id="chatBoxInner"></div>
+        <form class="input-container" onsubmit="sendMessageWrapper(event)">
+            <input type="text" id="inputField" placeholder="Type a message...">
+            <button type="submit">Send</button>
+            <div id="loadingSpinner" class="spinner" style="display: none;"></div>
+        </form>
+    </div>
+
+
+    <div id="questionBox">
+        <form class="input-container" onsubmit="submitQuestion(event)">
+            <input type="text" id="questionField" placeholder="Type your question...">
+            <button type="submit">Ask</button>
+            <div id="questionLoadingSpinner" class="spinner" style="display: none;"></div>
+        </form>
+    </div>
+</div>
+
 <script>
     // Expose the chatlog as a global variable
     var chatlog = {{ chatlog | tojson }};
