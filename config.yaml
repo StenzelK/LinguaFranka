@@ -1,6 +1,7 @@
 settings:
   auto_translate: false
-  overwrite_sys_lang: false
+  desired_scenario: Casual conversation
+  overwrite_sys_lang: true
   overwrite_token_limit: false
   practice_lang: de
   practice_lang_prof: beginner

@@ -4,6 +4,9 @@
 {% block title %}
 {{ content.lang.title }}
 {% endblock %}
+{% block head %} 
+<link rel="stylesheet" href="/static/lang.css">
+{% endblock %}
 
 {% block content %}
 <h1>{{ content.lang.current_language }}:
@@ -17,7 +20,7 @@
 <form action="/chooselang" method="POST">
     <label for="language">{{ content.lang.choose_language }}:</label>
     <input type="text" id="language" name="language" required>
-    <label for="language">Declare your proficiency:</label>
+    <label for="language_prof">Declare your proficiency:</label>
     <select id="practice_lang_prof" name="practice_lang_prof">
         <option value="beginner" selected>Beginner</option>
         <option value="elementary">Elementary</option>
@@ -27,6 +30,8 @@
         <option value="proficient">Proficient</option>
         <option value="native">Native</option>
       </select>
+    <label for="scenario">Specific scenario:</label>
+    <input type="text" id="desired_scenario" name="desired_scenario" value="Casual conversation" required>
     <button type="submit">{{ content.lang.submit }}</button>
 </form>
 {% endblock %}

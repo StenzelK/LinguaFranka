@@ -4,7 +4,7 @@ import os
 from API_keys import GOOGLE_CLOUD_API
 import httpx
 import yaml
-from GPT_tools import gpt_guess_lang, gpt_get_chat_response, gpt_get_user_comment, gpt_get_bot_explain, gpt_get_bot_answer
+from GPT_tools import gpt_get_chat_initialise, gpt_guess_lang, gpt_get_chat_response, gpt_get_user_comment, gpt_get_bot_explain, gpt_get_bot_answer
 import tiktoken
 
 
@@ -156,9 +156,11 @@ def load_site_data():
     user_profile = settings["user_profile"]
     practice_lang = settings["practice_lang"]
     practice_lang_prof = settings["practice_lang_prof"]
+    desired_scenario = settings["desired_scenario"]
+    auto_translate = settings["auto_translate"]
     
     
-    return {"config": config, "settings": settings, "site_lang": site_lang, "user_profile": user_profile, "practice_lang": practice_lang, "practice_lang_prof": practice_lang_prof}
+    return {"config": config, "settings": settings, "site_lang": site_lang, "user_profile": user_profile, "practice_lang": practice_lang, "practice_lang_prof": practice_lang_prof, "desired_scenario": desired_scenario, "auto_translate": auto_translate}
 
 def load_user_profile(profile):
     base_dir = 'user_profiles'
@@ -198,7 +200,7 @@ def update_user_profile(new_profile):
     with open(file_path, 'w') as file:
         yaml.safe_dump(config, file)
         
-def update_practice_language(language, practice_lang_prof):
+def update_practice_language(language, practice_lang_prof, desired_scenario):
     file_path = "config.yaml"
     with open(file_path, 'r') as file:
         config = yaml.safe_load(file)
@@ -207,6 +209,7 @@ def update_practice_language(language, practice_lang_prof):
     # Update the practice_lang
     config['settings']['practice_lang'] = code
     config['settings']['practice_lang_prof'] = practice_lang_prof
+    config['settings']['desired_scenario'] = desired_scenario
     
     # Write the updated data back to the file
     with open(file_path, 'w') as file:
@@ -398,6 +401,38 @@ def get_context_to_token_limit(file_path, token_limit=2900):
     return formatted_log
 
 
+def initialize_chat_log():
+    """
+    Check for the existence of log.json. If it doesn't exist, create it and
+    call gpt_get_chat_initialise with the necessary parameters, then append
+    the response as the system role.
+    """
+    
+    site_data = load_site_data()
+    practice_lang = code_to_lang(site_data["practice_lang"])
+    user_profile = load_user_profile(site_data["user_profile"])
+    practice_lang_prof = site_data["practice_lang_prof"]
+    desired_scenario = site_data["desired_scenario"]
+    base_dir = "chat_logs"
+    directory = os.path.join(base_dir, practice_lang)
+    
+    os.makedirs(directory, exist_ok=True)
+    file_name = 'log.json'
+    file_path = os.path.join(directory, file_name)
+    
+    if not os.path.exists(file_path):
+        initial_response = gpt_get_chat_initialise([], practice_lang, "N/A", user_profile, practice_lang_prof, desired_scenario)
+        print(f'Initial bot response: {initial_response}')
+        
+        initial_log = {
+            "log": [
+                {"role": "system", "message": initial_response}
+            ]
+        }
+        
+        with open(file_path, 'w') as f:
+            json.dump(initial_log, f, indent=4)
+
 def process_data(data):
     """
     Process the given data based on its type.
@@ -435,6 +470,7 @@ def handle_message(content):
     practice_lang = code_to_lang(site_data["practice_lang"])
     user_profile = load_user_profile(site_data["user_profile"])
     practice_lang_prof = site_data["practice_lang_prof"]
+    desired_scenario = site_data["desired_scenario"]
     base_dir = "chat_logs"
     directory = os.path.join(base_dir, practice_lang)
     
@@ -446,7 +482,7 @@ def handle_message(content):
     append_chatlog(content, file_path, role='user')
     context = get_context_to_token_limit(file_path)
 
-    bot_response = gpt_get_chat_response(context, practice_lang, "DEBUG", user_profile, practice_lang_prof)
+    bot_response = gpt_get_chat_response(context, practice_lang, "N/A", user_profile, practice_lang_prof, desired_scenario)
     print(f'Bot response: {bot_response}')
     append_chatlog(bot_response, file_path, role='system')
     

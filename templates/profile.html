@@ -4,6 +4,9 @@
 {% block title %}
 {{ content.profile.title }}
 {% endblock %}
+{% block head %} 
+<link rel="stylesheet" href="/static/profile.css">
+{% endblock %}
 
 {% block content %}
 <h1>{{ content.profile.current_profile }}</h1>

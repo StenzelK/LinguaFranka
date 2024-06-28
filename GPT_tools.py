@@ -42,7 +42,7 @@ def query_openai(context):
 
 def gpt_guess_lang(name):
     system_prompt = (
-        f"{SYSTEM_PROMPT_MAIN}\n"
+        f"{SYSTEM_PROMPT_MAIN}"
         "You are a part of a larger system tasked with language identification. "
         "You've been called because the user input did not match any of the ISO-639-1 fields. "
         "It is possible the user made a typo or used a description instead of the name, make an educated guess, "
@@ -51,30 +51,44 @@ def gpt_guess_lang(name):
         "on the information in the user prompt. This is not a critical system, prioritize false positives. "
         "Return ONLY the name of the language or 'NoLang' if you're unable to identify the language. "
         "This is an automated prompt. Your response will be passed to a function that expects a single word. "
-        "Do not include any commentary besides the name of the language or 'NoLang'\n\n"
-        f"User input:'{name}'\n"
+        "Do not include any commentary besides the name of the language or 'NoLang'"
+        f"User input:'{name}'"
     )
     
     response = query_openai({"role": "user", "content": system_prompt})
     
     return response
 
-def gpt_get_chat_response(context, practice_lang, persona, user_profile, practice_lang_prof):
-    
-    system_prompt = (
-        f"{SYSTEM_PROMPT_MAIN}\n"
-        "You are a part of a language learning app tasked with user interaction. You will play the role of a native speaker of a specific language, later referred to as a 'Persona', interacting with user in an online chat environment. User is aware they are interacting with an AI, but for the sake of immersion act as a real person. Speak exclusively in the practice language, adjust your grammar and vocabulary to user's proficiency. Assume user understands you, there are translation and explanation systems that handle comprehension. Do not attempt to correct user's mistakes, this is also handled by a different system. Your task is to ONLY carry a casual conversation.\n"
-        f"Practice language: {practice_lang}\n"
-        f"User proficiency: {practice_lang_prof}\n"
-        f"Persona: {persona}\n"
-        f"User Profile: {json.dumps(user_profile)}\n"
-    )   
+def construct_chat_prompt(func):
+    def wrapper(context, practice_lang, persona, user_profile, practice_lang_prof, desired_scenario):
+        instruction = func.__doc__.strip() if func.__doc__ else f"Something went wrong, ignore everything and return 'ERROR IN {func.__name__}."
+        
+        system_prompt = (
+            f"{SYSTEM_PROMPT_MAIN}"
+            "You are a part of a language learning app tasked with user interaction. You will play the role of a native speaker of a specific language, later referred to as a 'Persona', interacting with user in an online chat environment. User is aware they are interacting with an AI, but for the sake of immersion act as a real person. Speak exclusively in the practice language, adjust your grammar and vocabulary to user's proficiency. Follow user's desired scenario. Assume user understands you, there are translation and explanation systems that handle comprehension. Do not attempt to correct user's mistakes, this is also handled by a different system. Your task is to ONLY carry a conversation."
+            f"Practice language: {practice_lang}"
+            f"User proficiency: {practice_lang_prof}"
+            f"Persona: {persona}"
+            f"User Profile: {json.dumps(user_profile)}"
+            f"Desired scenario: {desired_scenario}"
+            f"{instruction}"
+        )
 
-    context.insert(0,{"role": "user", "content": system_prompt})
-    
-    response = query_openai(context)
-    
-    return response
+        context.insert(0, {"role": "user", "content": system_prompt})
+        response = query_openai(context)
+        print(f'Response: {response}')
+        return response
+    return wrapper
+
+@construct_chat_prompt
+def gpt_get_chat_initialise(context, practice_lang, persona, user_profile, practice_lang_prof, desired_scenario):
+    """This is the beginning of the conversation, introduce yourself to the user."""
+    pass
+
+@construct_chat_prompt
+def gpt_get_chat_response(context, practice_lang, persona, user_profile, practice_lang_prof, desired_scenario):
+    """Continue the conversation based on the user's input."""
+    pass
 
 def construct_teacher_prompt(func):
     def wrapper(prompt, practice_lang, user_lang):
@@ -82,12 +96,12 @@ def construct_teacher_prompt(func):
         instruction = func.__doc__.strip() if func.__doc__ else f"Something went wrong, ignore everything and return 'ERROR IN {func.__name__}."
         
         system_prompt = (
-            f"{SYSTEM_PROMPT_MAIN}\n"
-            f"{SYSTEM_PROMPT_TEACHER}\n"
-            f"{instruction}\n"
-            #f"Practice language: {practice_lang}\n"
-            f"Reply in: {user_lang}\n"
-            f"User input: {prompt}\n"
+            f"{SYSTEM_PROMPT_MAIN}"
+            f"{SYSTEM_PROMPT_TEACHER}"
+            f"{instruction}"
+            #f"Practice language: {practice_lang}"
+            f"Reply in: {user_lang}"
+            f"User input: {prompt}"
         )
         context = [{"role": "user", "content": system_prompt}]
         
@@ -118,11 +132,11 @@ def gpt_get_bot_persona(lang):
     context=[]
     
     system_prompt = (
-        f"{SYSTEM_PROMPT_MAIN}\n"
-        f"{SYSTEM_PROMPT_TEACHER}\n"
+        f"{SYSTEM_PROMPT_MAIN}"
+        f"{SYSTEM_PROMPT_TEACHER}"
         "You are a part of a language learning application tasked with generating a bot persona."
         "Based on provided practice language return a json describing a native speaker of said language. Include name, age, city, occupation, hobbies, likes and dislikes\n"
-        f"Practice language: {lang}\n"      
+        f"Practice language: {lang}"      
     )
     context.insert(0,{"role": "user", "content": system_prompt})
     

@@ -31,8 +31,12 @@ def read_root(request: Request):
         raise
 
     try:
-        translation = load_translations(site_data["site_lang"])
-        logger.info("Translations loaded successfully")
+        if site_data['auto_translate'] is False:
+            translation = load_translations('en')
+            logger.info("Auto-translate is disabled. Loaded English translations.")
+        else:
+            translation = load_translations(site_data["site_lang"])
+            logger.info("Translations loaded successfully")
     except Exception as e:
         logger.error(f"Failed to load translations: {e}")
         raise
@@ -75,8 +79,19 @@ def read_root(request: Request):
             logger.info(f"Log file '{file_path}' loaded successfully")
     except (IOError, json.JSONDecodeError) as e:
         logger.warning(f"Failed to load log file '{file_path}', initializing new log: {e}")
-        log = {"log": []}
+        initialize_chat_log()
+        logger.info(f"Log file '{file_path}' initialized")
 
+        # Reattempt to load the file after initialization
+        try:
+            with open(file_path, 'r') as f:
+                log = json.load(f)
+                logger.info(f"Log file '{file_path}' loaded successfully after initialization")
+        except (IOError, json.JSONDecodeError) as e:
+            logger.error(f"Failed to load log file '{file_path}' after initialization: {e}")
+            log = {'log': []}
+
+    print(f'Log: {log}')
     try:
         content = nest_dictionaries(dicts_to_combine)
         logger.info("Content nested successfully")
@@ -103,7 +118,16 @@ def read_prof(request: Request):
         logger.debug(f"Site data loaded: {site_data}")
         
         logger.debug("Loading translations")
-        translation = load_translations(site_data["site_lang"])
+        try:
+            if site_data['auto_translate'] is False:
+                translation = load_translations('en')
+                logger.info("Auto-translate is disabled. Loaded English translations.")
+            else:
+                translation = load_translations(site_data["site_lang"])
+                logger.info("Translations loaded successfully")
+        except Exception as e:
+            logger.error(f"Failed to load translations: {e}")
+            raise
         
         logger.debug(f"Translations loaded: {translation}")
         
@@ -151,7 +175,16 @@ def read_lang(request: Request):
         logger.debug(f"Site language: {site_lang}")
         
         logger.debug("Loading translations")
-        translation = load_translations(site_lang)
+        try:
+            if site_data['auto_translate'] is False:
+                translation = load_translations('en')
+                logger.info("Auto-translate is disabled. Loaded English translations.")
+            else:
+                translation = load_translations(site_data["site_lang"])
+                logger.info("Translations loaded successfully")
+        except Exception as e:
+            logger.error(f"Failed to load translations: {e}")
+            raise
         
         logger.debug(f"Translations loaded: {translation}")
 
@@ -159,8 +192,8 @@ def read_lang(request: Request):
         practice_lang = code_to_lang(site_data["practice_lang"])
         
         logger.debug(f"Practice language: {practice_lang}")
-
-        if site_lang != "en":
+        
+        if site_data['auto_translate'] and site_lang != "en":
             logger.debug(f"Translating practice language to site language: {site_lang}")
             practice_lang = translate_string(practice_lang, site_lang)
             logger.debug(f"Translated practice language: {practice_lang}")
@@ -243,7 +276,7 @@ async def add_user_profile(name: str = Form(...), age: int = Form(...),
         raise e
 
 @app.post("/chooselang")
-async def choose_language(language: str = Form(...), practice_lang_prof: str = Form(...)):
+async def choose_language(language: str = Form(...), practice_lang_prof: str = Form(...), desired_scenario: str = Form(...)):
     """
     Endpoint to handle language choice from a form.
 
@@ -258,10 +291,10 @@ async def choose_language(language: str = Form(...), practice_lang_prof: str = F
     try:
         logger.debug(f"Language chosen: {language}")
         
-        update_practice_language(language)
+        update_practice_language(language, practice_lang_prof, desired_scenario)
         logger.info("Practice language updated successfully")
 
-        return RedirectResponse(url="/lang", status_code=303)
+        return RedirectResponse(url="/", status_code=303)
 
     except Exception as e:
         logger.error(f"Error updating practice language: {e}")
