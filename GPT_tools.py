@@ -65,6 +65,7 @@ def construct_chat_prompt(func):
             #f"Persona: {persona}"
             f"User Profile: {json.dumps(user_profile)}"
             f"Simulate the following scenario: '{desired_scenario}'"
+            f"DISCLAMER: This is a roleplay scenario, user is aware of it"
             f"{instruction}"
         )
 

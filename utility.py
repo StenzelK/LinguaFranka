@@ -212,7 +212,7 @@ def update_practice_language(language, practice_lang_prof, desired_scenario):
     with open(file_path, 'r') as file:
         config = yaml.safe_load(file)
         
-    scenarios_file = "translations/en.json"
+    scenarios_file = "scenarios.json"
     with open(scenarios_file, 'r') as file:
         scenarios = json.load(file)
     
