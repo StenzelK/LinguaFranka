@@ -342,7 +342,7 @@ async def choose_language(language: str = Form(...), practice_lang_prof: str = F
         update_practice_language(language, practice_lang_prof, desired_scenario)
         logger.info("Practice language updated successfully")
 
-        return RedirectResponse(url="/", status_code=303)
+        return RedirectResponse(url="/reset-chat", status_code=303)
 
     except Exception as e:
         logger.error(f"Error updating practice language: {e}")
@@ -441,8 +441,8 @@ async def websocket_endpoint(websocket: WebSocket):
         else:
             logger.info("WebSocket already closed.")
             
-@app.post("/reset-chat")
-async def reset_chat():
+@app.route("/reset-chat", methods=["GET", "POST"])
+async def reset_chat(request: Request):
     site_data = load_site_data()
 
     practice_lang = code_to_lang(site_data["practice_lang"])
@@ -458,4 +458,4 @@ async def reset_chat():
         print(f"{file_name} has been deleted.")
     else:
         print(f"{file_name} does not exist.")
-    return {"message": "Chat has been reset"}
+    return RedirectResponse(url="/", status_code=303)

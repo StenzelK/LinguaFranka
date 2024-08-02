@@ -154,7 +154,7 @@ function handleMessageClick(event) {
 async function resetChat() {
     try {
         const response = await fetch('/reset-chat', {
-            method: 'POST',
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
             }

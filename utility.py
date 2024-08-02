@@ -1,6 +1,8 @@
+import html
 import json
 import locale
 import os
+import re
 import httpx
 import yaml
 from GPT_tools import gpt_get_chat_initialise, gpt_guess_lang, gpt_get_chat_response, gpt_get_user_comment, gpt_get_bot_explain, gpt_get_bot_answer
@@ -577,3 +579,4 @@ def handle_explain(content):
     print(f'Explanation: {explanation}')
 
     return {"type": "explanation", "message": "Question received", "explanation": explanation}
+

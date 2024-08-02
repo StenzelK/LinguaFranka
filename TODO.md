@@ -72,18 +72,26 @@
 1. **Fatal Error If Translation Files Don't Match**
    - **Priority: CRITICAL**
    - Resolve the critical issue where mismatched translation files cause the application to crash, ensuring consistent stability across various locales.
+   - **FIX - nonexistent files default to English, mismatch to be detected in testing**
 
 2. **No Translation on User Profile**
    - **Priority: Evaluate**
    - Assess the need and potential benefits of translating user profile content, based on user feedback and usage analytics.
+   - **Irrelevant - no tangible benefit to the user**
 
 3. **No Sanitization on User Profile Input**
    - **Priority: Medium**
    - Implement validation for user profile inputs to prevent issues arising from malformed or malicious data entries.
+   - **FIX - implemented js based sanitizer to all forms**
 
 4. **Examples in profile submit form ot displaying correctly**
    - **Priority: Low**
    - Fix improper default texts in user profile submition form
+   - **FIX - corrected jinja formatting**
+
+5. **Language explanation chooses a random language when both practice and user language are the same**
+   - **Priority: Low**
+   - Fringe scenario that will likely never happen in actual use
 
 ## Considerations
 
@@ -92,10 +100,12 @@
 1. **Remove `user_lang` from Config**
    - **Consideration: Redundancy?**
    - Evaluate the redundancy of `user_lang` in the config, considering the possibility of using `native_language` from user profiles instead.
+   - **CLOSED - variables made codepentent, kept user_lang for ease of access**
 
 2. **Refactor GPT_Tools**
    - **Consideration: Potential name conflicts**
    - Consts in GPT_tools.py are global and may cause namespace issues. Refactor to OOP?
+   - **CLOSED - renamed consts to minimize conflict opportunities**
    
 ### Additional features
 
