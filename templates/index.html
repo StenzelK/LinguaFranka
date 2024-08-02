@@ -2,7 +2,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-{{ content.index.title }}
+{{ content.nav.title }}
 {% endblock %}
 {% block head %} 
 <link rel="stylesheet" href="/static/index.css">
@@ -11,25 +11,26 @@
 {% block content %}
 <div id="mainContainer">
     <div id="teacherBox">
+        <div id="explanationBoxTitle">{{ content.index.explanation_box_title }}</div>
         <div id="explanationBoxInner"></div>
     </div>
 
     <div id="chatBox">
-        <div id="chatBoxTitle">Remember: Everything the bot says is made up!</div>
+        <div id="chatBoxTitle">{{ content.index.chat_box_title }}</div>
         <div id="chatBoxInner"></div>
         <form class="input-container" onsubmit="sendMessageWrapper(event)">
-            <input type="text" id="inputField" placeholder="Type a message...">
-            <button type="submit">Send</button>
+            <input type="text" id="inputField" placeholder="{{ content.index.input_field_placeholder }}">
+            <button type="submit" title="{{ content.index.send_button }}">➤</button>
+            <button id="reset-chat-button" onclick="resetChat()" title="{{ content.index.reset_chat_button }}">❌</button>
             <div id="loadingSpinner" class="spinner" style="display: none;"></div>
         </form>
     </div>
 
-
     <div id="questionBox">
         <div id="questionBoxInner"></div>
         <form class="input-container" onsubmit="submitQuestionWrapper(event)">
-            <input type="text" id="questionField" placeholder="Type your question...">
-            <button type="submit">Ask</button>
+            <input type="text" id="questionField" placeholder="{{ content.index.question_field_placeholder }}">
+            <button type="submit">{{ content.index.ask_button }}</button>
             <div id="questionLoadingSpinner" class="spinner" style="display: none;"></div>
         </form>
     </div>

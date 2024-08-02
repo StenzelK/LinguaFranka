@@ -195,7 +195,7 @@ def read_lang(request: Request):
         
         if site_data['auto_translate'] and site_lang != "en":
             logger.debug(f"Translating practice language to site language: {site_lang}")
-            practice_lang = translate_string(practice_lang, site_lang)
+            practice_lang = practice_lang#translate_string(practice_lang, site_lang)
             logger.debug(f"Translated practice language: {practice_lang}")
 
         dicts_to_combine = {
@@ -211,6 +211,53 @@ def read_lang(request: Request):
         logger.debug(f"Content nested: {content}")
 
         return templates.TemplateResponse("lang.html", {"request": request, "content": content})
+
+    except Exception as e:
+        logger.error(f"Error processing request for /lang: {e}")
+        raise e
+    
+@app.get("/settings", response_class=HTMLResponse)
+def read_lang(request: Request):
+    logger.info("Received request for /settings")
+
+    try:
+        logger.debug("Loading site data")
+        site_data = load_site_data()
+        
+        logger.debug(f"Site data loaded: {site_data}")
+        
+        site_lang = site_data["site_lang"]
+        logger.debug(f"Site language: {site_lang}")
+        
+        logger.debug("Loading translations")
+        try:
+            if site_data['auto_translate'] is False:
+                translation = load_translations('en')
+                logger.info("Auto-translate is disabled. Loaded English translations.")
+            else:
+                translation = load_translations(site_data["site_lang"])
+                logger.info("Translations loaded successfully")
+        except Exception as e:
+            logger.error(f"Failed to load translations: {e}")
+            raise
+        
+        config = load_config()
+        config_data = config.get("settings")
+        print(f"Config data: {config_data}")
+
+        dicts_to_combine = {
+            "nav": translation["nav"],
+            "settings": translation["settings"],
+            "config": config_data            
+        }
+        
+        logger.debug(f"Combining dictionaries: {dicts_to_combine}")
+        
+        content = nest_dictionaries(dicts_to_combine)
+        
+        logger.debug(f"Content nested: {content}")
+
+        return templates.TemplateResponse("settings.html", {"request": request, "content": content})
 
     except Exception as e:
         logger.error(f"Error processing request for /lang: {e}")
@@ -289,6 +336,7 @@ async def choose_language(language: str = Form(...), practice_lang_prof: str = F
     logger.info("Received request to choose language")
 
     try:
+        print(f"Language chosen: {language}")
         logger.debug(f"Language chosen: {language}")
         
         update_practice_language(language, practice_lang_prof, desired_scenario)
@@ -299,6 +347,62 @@ async def choose_language(language: str = Form(...), practice_lang_prof: str = F
     except Exception as e:
         logger.error(f"Error updating practice language: {e}")
         raise e
+    
+    
+@app.post("/changesettings")
+async def change_settings(
+    auto_translate: bool = Form(False),
+    overwrite_sys_lang: bool = Form(False),
+    overwrite_token_limit: bool = Form(False),
+    user_token_limit: int = Form(3000),
+    llm_select: str = Form("gpt-3"),
+    gpt3_api_key: str = Form(""),
+    gemini_api_key: str = Form(""),
+    llama3_api_key: str = Form("")
+):
+    config = load_config()
+    settings = config.get("settings")
+    
+    # Initialize dictionaries to store changes
+    setting_changes = {}
+    api_changes = {}
+
+    # Define the settings to compare
+    new_settings = {
+        'auto_translate': auto_translate,
+        'overwrite_sys_lang': overwrite_sys_lang,
+        'overwrite_token_limit': overwrite_token_limit,
+        'user_token_limit': user_token_limit,
+        'llm_select': llm_select
+    }
+
+    # Iterate through the new settings and compare with the current settings
+    for key, new_value in new_settings.items():
+        if key in settings and settings[key] != new_value:
+            setting_changes[key] = new_value
+
+    # Handle API keys separately
+    api_keys = {
+        'gpt3_api_key': gpt3_api_key,
+        'gemini_api_key': gemini_api_key,
+        'llama3_api_key': llama3_api_key
+    }
+
+    for key, value in api_keys.items():
+        if value:  # Only consider non-empty API keys
+            api_changes[key] = value
+
+    # Call update_config with the settings changes
+    if setting_changes:
+        update_config(**setting_changes)
+
+    # Call update_apis with the API key changes
+    if api_changes:
+        update_apis(**api_changes)
+        
+    return RedirectResponse(url="/settings", status_code=303)
+    
+    
 
 ######################################
 #-------------Chat util--------------#
@@ -336,3 +440,22 @@ async def websocket_endpoint(websocket: WebSocket):
                 logger.error(f"Error while closing WebSocket: {e}")
         else:
             logger.info("WebSocket already closed.")
+            
+@app.post("/reset-chat")
+async def reset_chat():
+    site_data = load_site_data()
+
+    practice_lang = code_to_lang(site_data["practice_lang"])
+    base_dir = "chat_logs"
+    directory = os.path.join(base_dir, practice_lang)
+    
+    os.makedirs(directory, exist_ok=True)
+    file_name = 'log.json'
+    file_path = os.path.join(directory, file_name)
+    
+    if os.path.exists(file_path):
+        os.remove(file_path)
+        print(f"{file_name} has been deleted.")
+    else:
+        print(f"{file_name} does not exist.")
+    return {"message": "Chat has been reset"}

@@ -151,6 +151,26 @@ function handleMessageClick(event) {
     }
 }
 
+async function resetChat() {
+    try {
+        const response = await fetch('/reset-chat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            window.location.href = '/';
+        } else {
+            alert('Failed to reset chat');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while resetting the chat');
+    }
+}
+
 
 window.onload = function() {
     var chatBox = document.getElementById("chatBoxInner");

@@ -1,0 +1,43 @@
+<!-- index.html -->
+{% extends 'base.html' %}
+
+{% block title %}
+{{ content.nav.title }}
+{% endblock %}
+{% block head %} 
+<link rel="stylesheet" href="/static/settings.css">
+{% endblock %}
+
+{% block content %}
+<form action="/changesettings" method="post">
+    <label for="auto_translate">{{ content.settings.auto_translate }}:</label>
+    <input type="checkbox" id="auto_translate" name="auto_translate" {{ 'checked' if content.config.auto_translate else '' }}><br><br>
+    
+    <label for="overwrite_sys_lang">{{ content.settings.overwrite_sys_lang }}:</label>
+    <input type="checkbox" id="overwrite_sys_lang" name="overwrite_sys_lang" {{ 'checked' if content.config.overwrite_sys_lang else '' }}><br><br>
+    
+    <label for="overwrite_token_limit">{{ content.settings.overwrite_token_limit }}:</label>
+    <input type="checkbox" id="overwrite_token_limit" name="overwrite_token_limit" {{ 'checked' if content.config.overwrite_token_limit else '' }}><br><br>
+    
+    <label for="user_token_limit">{{ content.settings.user_token_limit }}:</label>
+    <input type="number" id="user_token_limit" name="user_token_limit" value="{{ content.config.user_token_limit }}"><br><br>
+    
+    <label for="llm_select">{{ content.settings.llm_select }}:</label>
+    <select id="llm_select" name="llm_select">
+        <option value="gpt-3" {% if content.config.llm_select == 'gpt-3' %}selected{% endif %}>GPT-3</option>
+        <option value="gemini" {% if content.config.llm_select == 'gemini' %}selected{% endif %} disabled>Gemini</option>
+        <option value="llama3" {% if content.config.llm_select == 'llama3' %}selected{% endif %} disabled>LLaMa3</option>
+    </select><br><br>
+    
+    <label for="gpt3_api_key">{{ content.settings.gpt3_api_key }}:</label>
+    <input type="password" id="gpt3_api_key" name="gpt3_api_key"><br><br>
+    
+    <label for="gemini_api_key">{{ content.settings.gemini_api_key }}:</label>
+    <input type="password" id="gemini_api_key" name="gemini_api_key" disabled><br><br>
+    
+    <label for="llama3_api_key">{{ content.settings.llama3_api_key }}:</label>
+    <input type="password" id="llama3_api_key" name="llama3_api_key" disabled><br><br>
+    
+    <input type="submit" value="Submit">
+</form>
+{% endblock %}

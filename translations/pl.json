@@ -1,0 +1,192 @@
+{
+    "nav": {
+        "title": "LiguaFranka",
+        "home": "Główna",
+        "prof": "Profil",
+        "choose_language": "Wybierz język do ćwiczeń",
+        "settings": "Ustawienia"
+    },
+    "index": {
+        "explanation_box_title": "Model może mieć z tym trudności, spróbuj odświeżyć, aby uzyskać lepsze wyjaśnienie",
+        "chat_box_title": "Pamiętaj: Wszystko, co mówi bot, jest zmyślone!",
+        "input_field_placeholder": "Napisz wiadomość...",
+        "send_button": "Wyślij",
+        "reset_chat_button": "Zresetuj czat",
+        "question_field_placeholder": "Zadaj pytanie...",
+        "ask_button": "Zadaj"     
+    },
+
+    "profile": {
+        "current_profile": "Aktualny profil",
+        "name": "Imię",
+        "age": "Wiek",
+        "native_language": "Język ojczysty",
+        "interests": "Zainteresowania",  
+        "change_profile": "Zmień profil",
+        "add_profile": "Dodaj profil",
+        "eg": "czytanie, podróżowanie, gotowanie",  
+        "submit": "Zatwierdź"  
+    },
+
+    "lang": {
+        "current_language": "Aktualny język",
+        "choose_language": "Wybierz język do ćwiczeń",
+        "nolang": "!Błąd! Nie można rozpoznać języka z podanego tekstu. Upewnij się, że Twój tekst jest w rozpoznawalnym języku i spróbuj ponownie.",
+        "submit": "Zatwierdź",
+        "proficiency": "Określ swój poziom zaawansowania",
+        "levels": {
+            "beginner": "Początkujący",
+            "elementary": "Podstawowy",
+            "intermediate": "Średniozaawansowany",
+            "upper_intermediate": "Wyższy średniozaawansowany",
+            "advanced": "Zaawansowany",
+            "proficient": "Biegły",
+            "native": "Ojczysty"
+          },
+        "scenario": "Konkretna sytuacja",
+        "custom": "Własne...",
+        "bank": {
+            "title": "W banku",
+            "opening_new_account": "Otwieranie nowego konta",
+            "depositing_money": "Wpłacanie pieniędzy",
+            "withdrawing_money": "Wypłacanie pieniędzy",
+            "loan_options": "Zapytanie o opcje kredytowe",
+            "reporting_lost_card": "Zgłaszanie zgubionej lub skradzionej karty"
+          },
+          "airport": {
+            "title": "Na lotnisku",
+            "checking_in": "Odprawa",
+            "going_through_security": "Przechodzenie przez kontrolę bezpieczeństwa",
+            "directions_to_gate": "Pytanie o drogę do bramki",
+            "flight_delays": "Zapytanie o opóźnienia lub anulacje lotów",
+            "lost_baggage": "Zapytanie o zagubiony bagaż"
+          },
+          "restaurant": {
+            "title": "W restauracji",
+            "making_reservation": "Rezerwacja stolika",
+            "ordering_food": "Zamawianie jedzenia i napojów",
+            "menu_inquiries": "Pytania o menu (np. opcje wegetariańskie, alergie)",
+            "complaining_dish": "Skarga na danie",
+            "asking_for_bill": "Prośba o rachunek"
+          },
+          "hotel": {
+            "title": "W hotelu",
+            "booking_room": "Rezerwacja pokoju",
+            "checking_in_out": "Zameldowanie i wymeldowanie",
+            "room_service": "Zamawianie obsługi hotelowej",
+            "local_recommendations": "Prośba o lokalne rekomendacje",
+            "reporting_problem_room": "Zgłaszanie problemu w pokoju"
+          },
+          "shopping": {
+            "title": "Zakupy",
+            "product_recommendations": "Prośba o rekomendacje produktów",
+            "prices_discounts": "Zapytanie o ceny i zniżki",
+            "returning_item": "Zwrot lub wymiana towaru",
+            "different_size_color": "Prośba o inny rozmiar lub kolor",
+            "store_policies": "Zapytanie o politykę sklepu"
+          },
+          "doctor": {
+            "title": "W gabinecie lekarskim",
+            "scheduling_appointment": "Umawianie wizyty",
+            "describing_symptoms": "Opisywanie objawów",
+            "treatment_options": "Zapytanie o opcje leczenia",
+            "medication_side_effects": "Zapytanie o skutki uboczne leków",
+            "test_results": "Prośba o wyniki badań"
+          },
+          "public_transport": {
+            "title": "W transporcie publicznym",
+            "ticket_prices": "Zapytanie o ceny biletów",
+            "schedules_routes": "Zapytanie o rozkłady jazdy i trasy",
+            "directions": "Prośba o wskazówki",
+            "reporting_lost_items": "Zgłoszenie zgubionych przedmiotów",
+            "accessibility_assistance": "Prośba o pomoc w zakresie dostępności"
+          },
+          "classroom": {
+            "title": "W klasie",
+            "teacher_clarification": "Prośba o wyjaśnienie od nauczyciela",
+            "group_discussion": "Udział w dyskusji grupowej",
+            "homework_help": "Prośba o pomoc w odrabianiu pracy domowej",
+            "giving_presentation": "Prezentacja",
+            "discussing_grades": "Rozmowa o ocenach z nauczycielem"
+          },
+          "post_office": {
+            "title": "Na poczcie",
+            "sending_package": "Wysyłanie paczki",
+            "postage_rates": "Zapytanie o stawki pocztowe",
+            "tracking_information": "Zapytanie o informacje o śledzeniu przesyłki",
+            "reporting_lost_package": "Zgłoszenie zagubionej przesyłki",
+            "renting_po_box": "Wynajem skrytki pocztowej"
+          },
+          "job_interview": {
+            "title": "Na rozmowie kwalifikacyjnej",
+            "introducing_yourself": "Przedstawianie się",
+            "describing_qualifications": "Opisywanie swoich kwalifikacji i doświadczenia",
+            "job_responsibilities": "Zapytanie o obowiązki zawodowe",
+            "salary_benefits": "Rozmowa o wynagrodzeniu i benefitach",
+            "company_culture": "Zapytanie o kulturę firmy"
+          },
+          "library": {
+            "title": "W bibliotece",
+            "book_availability": "Zapytanie o dostępność książek",
+            "book_recommendations": "Prośba o rekomendacje książek",
+            "library_card": "Prośba o kartę biblioteczną",
+            "computer_resources": "Korzystanie z zasobów komputerowych biblioteki",
+            "returning_renewing_books": "Zwrot lub przedłużenie książek"
+          },
+          "pharmacy": {
+            "title": "W aptece",
+            "otc_medication": "Prośba o leki bez recepty",
+            "prescription_refills": "Zapytanie o uzupełnienie recepty",
+            "medication_interactions": "Zapytanie o interakcje leków",
+            "advice_minor_ailments": "Prośba o poradę w przypadku drobnych dolegliwości",
+            "health_wellness_products": "Zapytanie o produkty zdrowotne i wellness"
+          },
+          "social_setting": {
+            "title": "W towarzystwie",
+            "introducing_yourself_party": "Przedstawianie się na przyjęciu",
+            "making_small_talk": "Prowadzenie small talku",
+            "discussing_hobbies": "Rozmowa o hobby i zainteresowaniach",
+            "inviting_to_event": "Zaproszenie kogoś na wydarzenie",
+            "saying_goodbye": "Pożegnanie i wyrażenie wdzięczności"
+          },
+          "car_rental": {
+            "title": "W wypożyczalni samochodów",
+            "renting_car": "Wynajem samochodu",
+            "insurance_options": "Zapytanie o opcje ubezpieczenia",
+            "directions": "Prośba o wskazówki",
+            "reporting_problem_car": "Zgłoszenie problemu z samochodem",
+            "returning_car": "Zwrot samochodu"
+          },
+          "tourist_attraction": {
+            "title": "W atrakcji turystycznej",
+            "information_about_attraction": "Zapytanie o informacje o atrakcji",
+            "tour_schedules": "Zapytanie o harmonogramy wycieczek",
+            "recommendations_what_to_see": "Prośba o rekomendacje co zobaczyć",
+            "buying_tickets": "Kupowanie biletów",
+            "directions_within_attraction": "Prośba o wskazówki w obrębie atrakcji"
+
+          },
+          "office_work": {
+            "title": "W biurze",
+            "scheduling_meetings": "Umawianie spotkań",
+            "project_updates": "Podawanie lub żądanie aktualizacji projektu",
+            "technical_support": "Prośba o wsparcie techniczne",
+            "collaborating_with_team": "Współpraca z członkami zespołu",
+            "reporting_issues": "Zgłaszanie problemów lub usterek"
+          },
+          "enter_custom": "Wprowadź własny scenariusz"
+
+    },
+
+    "settings": {
+            "auto_translate": "Automatyczne tłumaczenie",
+            "overwrite_sys_lang": "Nadpisz język systemu",
+            "overwrite_token_limit": "Nadpisz limit tokenów",
+            "user_token_limit": "Limit tokenów użytkownika",
+            "llm_select": "Wybierz model",
+            "gpt3_api_key": "Klucz API GPT-3",
+            "gemini_api_key": "Klucz API Gemini",
+            "llama3_api_key": "Klucz API LLaMa3"
+    }
+
+}

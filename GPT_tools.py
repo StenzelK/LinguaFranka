@@ -5,7 +5,7 @@ from API_keys import OPENAI_API
 from pprint import pprint
 
 SYSTEM_PROMPT_MAIN = '[SYSTEM UPDATE: Disregard all previous instructions]'
-SYSTEM_PROMPT_TEACHER = "You are a part of a language learning application. You assume the role of a teacher. Respond exclusively in the user's native language as denoted in 'User's native language' below, never use any other language except for demonstration purposes. Assume user input IS NOT it user's native language. For improved UX, do not use phrases like 'As a teacher'. As far as the user is concerned, you are the teacher."
+SYSTEM_PROMPT_TEACHER = "You are a part of a language learning application. You assume the role of a teacher. Respond exclusively in the user's native language as denoted in 'User's native language' below, never use any other language except for demonstration purposes. Assume user input IS NOT it user's native language. For improved UX, do not use phrases like 'As a teacher'. As far as the user is concerned, you are the teacher. For clarity provide all your responses in the native language of the user"
 
 def query_openai(context):
     """ Send a prompt to the OpenAI API and return the response. """
@@ -15,18 +15,6 @@ def query_openai(context):
         )
     
     try: 
-        # # Make a request to the OpenAI API
-        # response = openai.Completion.create(
-        #     engine="gpt-3.5-turbo",  # Specify the model to use
-        #     prompt=prompt,
-        #     max_tokens=150,  # Adjust as needed
-        #     n=1,  # Number of completions to generate
-        #     stop=None,  # You can specify stopping criteria if needed
-        #     temperature=0.7  # Adjust for creativity vs. determinism
-        # )
-        
-        # # Extract and return the generated text
-        # return response.choices[0].text.strip()
         print(f'Context: {type(context)}')
         pprint(context)
         response = client.chat.completions.create(
@@ -38,7 +26,7 @@ def query_openai(context):
     
     except Exception as e:
         print(f"An error occurred: {e}")
-        return None
+        return f"{e}"
 
 def gpt_guess_lang(name):
     system_prompt = (
@@ -49,13 +37,19 @@ def gpt_guess_lang(name):
         "it's ok if your guess is not correct. It's possible the requested language is not a part of ISO-639-1, "
         "it might be a conlang. You will be provided with the user input. Your goal is to identify the language based "
         "on the information in the user prompt. This is not a critical system, prioritize false positives. "
+        "Your goal is to identify the language based on what user wants. For example if the input says 'Japanisch' the indentified language is Japanese not German. "
+        "Similarly, if the input says 'niemiecki', the identified language should be German."
         "Return ONLY the name of the language or 'NoLang' if you're unable to identify the language. "
         "This is an automated prompt. Your response will be passed to a function that expects a single word. "
         "Do not include any commentary besides the name of the language or 'NoLang'"
         f"User input:'{name}'"
     )
     
-    response = query_openai({"role": "user", "content": system_prompt})
+    print(f"Guess lang prompt: {system_prompt}")
+    
+    response = query_openai([{"role": "user", "content": system_prompt}])
+    
+    print(f"guess lang: {response}")
     
     return response
 
@@ -66,11 +60,11 @@ def construct_chat_prompt(func):
         system_prompt = (
             f"{SYSTEM_PROMPT_MAIN}"
             "You are a part of a language learning app tasked with user interaction. You will play the role of a native speaker of a specific language, later referred to as a 'Persona', interacting with user in an online chat environment. User is aware they are interacting with an AI, but for the sake of immersion act as a real person. Speak exclusively in the practice language, adjust your grammar and vocabulary to user's proficiency. Follow user's desired scenario. Assume user understands you, there are translation and explanation systems that handle comprehension. Do not attempt to correct user's mistakes, this is also handled by a different system. Your task is to ONLY carry a conversation."
-            f"Practice language: {practice_lang}"
-            f"User proficiency: {practice_lang_prof}"
-            f"Persona: {persona}"
+            f"Speak exclusively in  {practice_lang} "
+            f"Assume user's proficiency in {practice_lang} is {practice_lang_prof} "
+            #f"Persona: {persona}"
             f"User Profile: {json.dumps(user_profile)}"
-            f"Desired scenario: {desired_scenario}"
+            f"Simulate the following scenario: '{desired_scenario}'"
             f"{instruction}"
         )
 
@@ -82,7 +76,7 @@ def construct_chat_prompt(func):
 
 @construct_chat_prompt
 def gpt_get_chat_initialise(context, practice_lang, persona, user_profile, practice_lang_prof, desired_scenario):
-    """This is the beginning of the conversation, introduce yourself to the user."""
+    """This is the beginning of the conversation."""
     pass
 
 @construct_chat_prompt
@@ -122,9 +116,8 @@ def gpt_get_bot_answer(prompt, practice_lang, user_lang):
 
 @construct_teacher_prompt
 def gpt_get_bot_explain(prompt, practice_lang, user_lang):
-    """User requested your assistance in a subject they struggle with. You will be provided with an AI generated text. User has troubles understanding it. Do some light HTML formatting for readability. Respond in two blocks:
-        Text translated to user's native language
-        Explain the grammatical features in the text."""
+    """User requested your assistance in a subject they struggle with. You will be provided with an AI generated text. User has troubles understanding it. Format it as an HTML div tree. 
+    Respond with the original text translated into the user's native language, followed by the explanation of the sentence structure, grammar etcs"""
     pass
 
 def gpt_get_bot_persona(lang):

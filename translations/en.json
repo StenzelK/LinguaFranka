@@ -1,17 +1,22 @@
 {
     "nav": {
+        "title": "LiguaFranka",
         "home": "Main",
         "prof": "Profile",
         "choose_language": "Choose a language to practice",
         "settings": "Settings"
     },
     "index": {
-        "title": "LiguaFranka",
-        "send": "Send"        
+        "explanation_box_title": "The model can struggle with this, try refreshing for a better explanation",
+        "chat_box_title": "Remember: Everything the bot says is made up!",
+        "input_field_placeholder": "Type a message...",
+        "send_button": "Send",
+        "reset_chat_button": "Reset Chat",
+        "question_field_placeholder": "Type your question...",
+        "ask_button": "Ask"     
     },
 
     "profile": {
-        "title": "LiguaFranka",
         "current_profile": "Current profile",
         "name": "Name",
         "age": "Age",
@@ -24,11 +29,164 @@
     },
 
     "lang": {
-        "title": "LiguaFranka",
         "current_language": "Current language",
         "choose_language": "Choose a language to practice",
         "nolang": "!Error! Unable to identify language from the input provided. Please ensure your input is in a recognizable language and try again.",
-        "submit": "Submit" 
+        "submit": "Submit",
+        "proficiency": "Declare your proficiency",
+        "levels": {
+            "beginner": "Beginner",
+            "elementary": "Elementary",
+            "intermediate": "Intermediate",
+            "upper_intermediate": "Upper Intermediate",
+            "advanced": "Advanced",
+            "proficient": "Proficient",
+            "native": "Native"
+          },
+        "scenario": "Specific scenario",
+        "custom": "Custom...",
+        "bank": {
+            "title": "At the bank",
+            "opening_new_account": "Opening a new account",
+            "depositing_money": "Depositing money",
+            "withdrawing_money": "Withdrawing money",
+            "loan_options": "Inquiring about loan options",
+            "reporting_lost_card": "Reporting a lost or stolen card"
+          },
+          "airport": {
+            "title": "At the airport",
+            "checking_in": "Checking in for a flight",
+            "going_through_security": "Going through security",
+            "directions_to_gate": "Asking for directions to the gate",
+            "flight_delays": "Inquiring about flight delays or cancellations",
+            "lost_baggage": "Lost baggage inquiry"
+          },
+          "restaurant": {
+            "title": "At a restaurant",
+            "making_reservation": "Making a reservation",
+            "ordering_food": "Ordering food and drinks",
+            "menu_inquiries": "Asking about menu items (e.g., vegetarian options, allergies)",
+            "complaining_dish": "Complaining about a dish",
+            "asking_for_bill": "Asking for the bill"
+          },
+          "hotel": {
+            "title": "At a hotel",
+            "booking_room": "Booking a room",
+            "checking_in_out": "Checking in and out",
+            "room_service": "Requesting room service",
+            "local_recommendations": "Asking for local recommendations",
+            "reporting_problem_room": "Reporting a problem in the room"
+          },
+          "shopping": {
+            "title": "Shopping",
+            "product_recommendations": "Asking for product recommendations",
+            "prices_discounts": "Inquiring about prices and discounts",
+            "returning_item": "Returning or exchanging an item",
+            "different_size_color": "Asking for a different size or color",
+            "store_policies": "Inquiring about store policies"
+          },
+          "doctor": {
+            "title": "At a doctor's office",
+            "scheduling_appointment": "Scheduling an appointment",
+            "describing_symptoms": "Describing symptoms",
+            "treatment_options": "Asking about treatment options",
+            "medication_side_effects": "Inquiring about medication side effects",
+            "test_results": "Asking for test results"
+          },
+          "public_transport": {
+            "title": "On public transport",
+            "ticket_prices": "Asking for ticket prices",
+            "schedules_routes": "Inquiring about schedules and routes",
+            "directions": "Asking for directions",
+            "reporting_lost_items": "Reporting lost items",
+            "accessibility_assistance": "Asking for assistance with accessibility"
+          },
+          "classroom": {
+            "title": "In a classroom",
+            "teacher_clarification": "Asking the teacher for clarification",
+            "group_discussion": "Participating in a group discussion",
+            "homework_help": "Asking for help with homework",
+            "giving_presentation": "Giving a presentation",
+            "discussing_grades": "Discussing grades with the teacher"
+          },
+          "post_office": {
+            "title": "At the post office",
+            "sending_package": "Sending a package",
+            "postage_rates": "Inquiring about postage rates",
+            "tracking_information": "Asking for tracking information",
+            "reporting_lost_package": "Reporting a lost package",
+            "renting_po_box": "Renting a PO Box"
+          },
+          "job_interview": {
+            "title": "At a job interview",
+            "introducing_yourself": "Introducing yourself",
+            "describing_qualifications": "Describing your qualifications and experience",
+            "job_responsibilities": "Asking about job responsibilities",
+            "salary_benefits": "Discussing salary and benefits",
+            "company_culture": "Asking about the company culture"
+          },
+          "library": {
+            "title": "At a library",
+            "book_availability": "Inquiring about book availability",
+            "book_recommendations": "Asking for book recommendations",
+            "library_card": "Requesting a library card",
+            "computer_resources": "Using the library's computer resources",
+            "returning_renewing_books": "Returning or renewing books"
+          },
+          "pharmacy": {
+            "title": "At a pharmacy",
+            "otc_medication": "Asking for over-the-counter medication",
+            "prescription_refills": "Inquiring about prescription refills",
+            "medication_interactions": "Asking about medication interactions",
+            "advice_minor_ailments": "Requesting advice on minor ailments",
+            "health_wellness_products": "Inquiring about health and wellness products"
+          },
+          "social_setting": {
+            "title": "In a social setting",
+            "introducing_yourself_party": "Introducing yourself at a party",
+            "making_small_talk": "Making small talk",
+            "discussing_hobbies": "Discussing hobbies and interests",
+            "inviting_to_event": "Inviting someone to an event",
+            "saying_goodbye": "Saying goodbye and expressing gratitude"
+          },
+          "car_rental": {
+            "title": "At a car rental agency",
+            "renting_car": "Renting a car",
+            "insurance_options": "Inquiring about insurance options",
+            "directions": "Asking for directions",
+            "reporting_problem_car": "Reporting a problem with the car",
+            "returning_car": "Returning the car"
+          },
+          "tourist_attraction": {
+            "title": "At a tourist attraction",
+            "information_about_attraction": "Asking for information about the attraction",
+            "tour_schedules": "Inquiring about tour schedules",
+            "recommendations_what_to_see": "Asking for recommendations on what to see",
+            "buying_tickets": "Buying tickets",
+            "directions_within_attraction": "Asking for directions within the attraction"
+
+          },
+          "office_work": {
+            "title": "At the office",
+            "scheduling_meetings": "Scheduling meetings",
+            "project_updates": "Providing or requesting project updates",
+            "technical_support": "Requesting technical support",
+            "collaborating_with_team": "Collaborating with team members",
+            "reporting_issues": "Reporting issues or problems"
+          },
+          "enter_custom": "Enter your custom scenario"
+
+    },
+
+    "settings": {
+            "auto_translate": "Auto Translate",
+            "overwrite_sys_lang": "Overwrite System Language",
+            "overwrite_token_limit": "Overwrite Token Limit",
+            "user_token_limit": "User Token Limit",
+            "llm_select": "Select model",
+            "gpt3_api_key": "GPT-3 API Key",
+            "gemini_api_key": "Gemini API Key",
+            "llama3_api_key": "LLaMa3 API Key"
     }
 
 }

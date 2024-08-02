@@ -2,13 +2,23 @@
 {% extends 'base.html' %}
 
 {% block title %}
-{{ content.lang.title }}
+{{ content.nav.title }}
 {% endblock %}
 {% block head %} 
 <link rel="stylesheet" href="/static/lang.css">
 {% endblock %}
 
 {% block content %}
+<script>
+    function toggleCustomOptionInput(selectElement) {
+        const customOptionInput = document.getElementById('customOptionInput');
+        if (selectElement.value === 'custom') {
+            customOptionInput.style.display = 'block';
+        } else {
+            customOptionInput.style.display = 'none';
+        }
+    }
+</script>
 <h1>{{ content.lang.current_language }}:
     {% if content.practice_lang == 'Nolang' %}
         {{content.lang.nolang}}
@@ -20,18 +30,136 @@
 <form action="/chooselang" method="POST">
     <label for="language">{{ content.lang.choose_language }}:</label>
     <input type="text" id="language" name="language" required>
-    <label for="language_prof">Declare your proficiency:</label>
+    <label for="language_prof">{{ content.lang.proficiency }}:</label>
     <select id="practice_lang_prof" name="practice_lang_prof">
-        <option value="beginner" selected>Beginner</option>
-        <option value="elementary">Elementary</option>
-        <option value="intermediate">Intermediate</option>
-        <option value="upper-intermediate">Upper Intermediate</option>
-        <option value="advanced">Advanced</option>
-        <option value="proficient">Proficient</option>
-        <option value="native">Native</option>
+        <option value="beginner" selected>{{ content.lang.levels.beginner }}</option>
+        <option value="elementary">{{ content.lang.levels.elementary }}</option>
+        <option value="intermediate">{{ content.lang.levels.intermediate }}</option>
+        <option value="upper-intermediate">{{ content.lang.levels.upper_intermediate }}</option>
+        <option value="advanced">{{ content.lang.levels.advanced }}</option>
+        <option value="proficient">{{ content.lang.levels.proficient }}</option>
+        <option value="native">{{ content.lang.levels.native }}</option>
       </select>
-    <label for="scenario">Specific scenario:</label>
-    <input type="text" id="desired_scenario" name="desired_scenario" value="Casual conversation" required>
+    <label for="scenario">{{ content.lang.scenario }}:</label>
+    <select id="options" name="desired_scenario" onchange="toggleCustomOptionInput(this)">
+        <option value="custom">{{ content.lang.custom }}</option>
+        <optgroup label="{{ content.lang.bank.title }}">
+            <option value="opening_new_account">{{ content.lang.bank.opening_new_account }}</option>
+            <option value="depositing_money">{{ content.lang.bank.depositing_money }}</option>
+            <option value="withdrawing_money">{{ content.lang.bank.withdrawing_money }}</option>
+            <option value="loan_options">{{ content.lang.bank.loan_options }}</option>
+            <option value="reporting_lost_card">{{ content.lang.bank.reporting_lost_card }}</option>
+        </optgroup>
+        <optgroup label="{{ content.lang.airport.title }}">
+            <option value="checking_in">{{ content.lang.airport.checking_in }}</option>
+            <option value="going_through_security">{{ content.lang.airport.going_through_security }}</option>
+            <option value="directions_to_gate">{{ content.lang.airport.directions_to_gate }}</option>
+            <option value="flight_delays">{{ content.lang.airport.flight_delays }}</option>
+            <option value="lost_baggage">{{ content.lang.airport.lost_baggage }}</option>
+        </optgroup>
+        <optgroup label="{{ content.lang.restaurant.title }}">
+            <option value="making_reservation">{{ content.lang.restaurant.making_reservation }}</option>
+            <option value="ordering_food">{{ content.lang.restaurant.ordering_food }}</option>
+            <option value="menu_inquiries">{{ content.lang.restaurant.menu_inquiries }}</option>
+            <option value="complaining_dish">{{ content.lang.restaurant.complaining_dish }}</option>
+            <option value="asking_for_bill">{{ content.lang.restaurant.asking_for_bill }}</option>
+        </optgroup>
+        <optgroup label="{{ content.lang.hotel.title }}">
+            <option value="booking_room">{{ content.lang.hotel.booking_room }}</option>
+            <option value="checking_in_out">{{ content.lang.hotel.checking_in_out }}</option>
+            <option value="room_service">{{ content.lang.hotel.room_service }}</option>
+            <option value="local_recommendations">{{ content.lang.hotel.local_recommendations }}</option>
+            <option value="reporting_problem_room">{{ content.lang.hotel.reporting_problem_room }}</option>
+        </optgroup>
+        <optgroup label="{{ content.lang.shopping.title }}">
+            <option value="product_recommendations">{{ content.lang.shopping.product_recommendations }}</option>
+            <option value="prices_discounts">{{ content.lang.shopping.prices_discounts }}</option>
+            <option value="returning_item">{{ content.lang.shopping.returning_item }}</option>
+            <option value="different_size_color">{{ content.lang.shopping.different_size_color }}</option>
+            <option value="store_policies">{{ content.lang.shopping.store_policies }}</option>
+        </optgroup>
+        <optgroup label="{{ content.lang.doctor.title }}">
+            <option value="scheduling_appointment">{{ content.lang.doctor.scheduling_appointment }}</option>
+            <option value="describing_symptoms">{{ content.lang.doctor.describing_symptoms }}</option>
+            <option value="treatment_options">{{ content.lang.doctor.treatment_options }}</option>
+            <option value="medication_side_effects">{{ content.lang.doctor.medication_side_effects }}</option>
+            <option value="test_results">{{ content.lang.doctor.test_results }}</option>
+        </optgroup>
+        <optgroup label="{{ content.lang.public_transport.title }}">
+            <option value="ticket_prices">{{ content.lang.public_transport.ticket_prices }}</option>
+            <option value="schedules_routes">{{ content.lang.public_transport.schedules_routes }}</option>
+            <option value="directions">{{ content.lang.public_transport.directions }}</option>
+            <option value="reporting_lost_items">{{ content.lang.public_transport.reporting_lost_items }}</option>
+            <option value="accessibility_assistance">{{ content.lang.public_transport.accessibility_assistance }}</option>
+        </optgroup>
+        <optgroup label="{{ content.lang.classroom.title }}">
+            <option value="teacher_clarification">{{ content.lang.classroom.teacher_clarification }}</option>
+            <option value="group_discussion">{{ content.lang.classroom.group_discussion }}</option>
+            <option value="homework_help">{{ content.lang.classroom.homework_help }}</option>
+            <option value="giving_presentation">{{ content.lang.classroom.giving_presentation }}</option>
+            <option value="discussing_grades">{{ content.lang.classroom.discussing_grades }}</option>
+        </optgroup>
+        <optgroup label="{{ content.lang.post_office.title }}">
+            <option value="sending_package">{{ content.lang.post_office.sending_package }}</option>
+            <option value="postage_rates">{{ content.lang.post_office.postage_rates }}</option>
+            <option value="tracking_information">{{ content.lang.post_office.tracking_information }}</option>
+            <option value="reporting_lost_package">{{ content.lang.post_office.reporting_lost_package }}</option>
+            <option value="renting_po_box">{{ content.lang.post_office.renting_po_box }}</option>
+        </optgroup>
+        <optgroup label="{{ content.lang.job_interview.title }}">
+            <option value="introducing_yourself">{{ content.lang.job_interview.introducing_yourself }}</option>
+            <option value="describing_qualifications">{{ content.lang.job_interview.describing_qualifications }}</option>
+            <option value="job_responsibilities">{{ content.lang.job_interview.job_responsibilities }}</option>
+            <option value="salary_benefits">{{ content.lang.job_interview.salary_benefits }}</option>
+            <option value="company_culture">{{ content.lang.job_interview.company_culture }}</option>
+        </optgroup>
+        <optgroup label="{{ content.lang.library.title }}">
+            <option value="book_availability">{{ content.lang.library.book_availability }}</option>
+            <option value="book_recommendations">{{ content.lang.library.book_recommendations }}</option>
+            <option value="library_card">{{ content.lang.library.library_card }}</option>
+            <option value="computer_resources">{{ content.lang.library.computer_resources }}</option>
+            <option value="returning_renewing_books">{{ content.lang.library.returning_renewing_books }}</option>
+        </optgroup>
+        <optgroup label="{{ content.lang.pharmacy.title }}">
+            <option value="otc_medication">{{ content.lang.pharmacy.otc_medication }}</option>
+            <option value="prescription_refills">{{ content.lang.pharmacy.prescription_refills }}</option>
+            <option value="medication_interactions">{{ content.lang.pharmacy.medication_interactions }}</option>
+            <option value="advice_minor_ailments">{{ content.lang.pharmacy.advice_minor_ailments }}</option>
+            <option value="health_wellness_products">{{ content.lang.pharmacy.health_wellness_products }}</option>
+        </optgroup>
+        <optgroup label="{{ content.lang.social_setting.title }}">
+            <option value="introducing_yourself_party">{{ content.lang.social_setting.introducing_yourself_party }}</option>
+            <option value="making_small_talk">{{ content.lang.social_setting.making_small_talk }}</option>
+            <option value="discussing_hobbies">{{ content.lang.social_setting.discussing_hobbies }}</option>
+            <option value="inviting_to_event">{{ content.lang.social_setting.inviting_to_event }}</option>
+            <option value="saying_goodbye">{{ content.lang.social_setting.saying_goodbye }}</option>
+        </optgroup>
+        <optgroup label="{{ content.lang.car_rental.title }}">
+            <option value="renting_car">{{ content.lang.car_rental.renting_car }}</option>
+            <option value="insurance_options">{{ content.lang.car_rental.insurance_options }}</option>
+            <option value="directions">{{ content.lang.car_rental.directions }}</option>
+            <option value="reporting_problem_car">{{ content.lang.car_rental.reporting_problem_car }}</option>
+            <option value="returning_car">{{ content.lang.car_rental.returning_car }}</option>
+        </optgroup>
+        <optgroup label="{{ content.lang.tourist_attraction.title }}">
+            <option value="information_about_attraction">{{ content.lang.tourist_attraction.information_about_attraction }}</option>
+            <option value="tour_schedules">{{ content.lang.tourist_attraction.tour_schedules }}</option>
+            <option value="recommendations_what_to_see">{{ content.lang.tourist_attraction.recommendations_what_to_see }}</option>
+            <option value="buying_tickets">{{ content.lang.tourist_attraction.buying_tickets }}</option>
+            <option value="directions_within_attraction">{{ content.lang.tourist_attraction.directions_within_attraction }}</option>
+        </optgroup>
+        <optgroup label="{{ content.lang.office_work.title }}">
+            <option value="scheduling_meetings">{{ content.lang.office_work.scheduling_meetings }}</option>
+            <option value="project_updates">{{ content.lang.office_work.project_updates }}</option>
+            <option value="technical_support">{{ content.lang.office_work.technical_support }}</option>
+            <option value="collaborating_with_team">{{ content.lang.office_work.collaborating_with_team }}</option>
+            <option value="reporting_issues">{{ content.lang.office_work.reporting_issues }}</option>
+        </optgroup>
+    </select>
+    <br>
+    <input type="text" id="customOptionInput" name="customOption" class="custom-option-input" placeholder="{{ content.lang.enter_custom }}">
+    <br>
     <button type="submit">{{ content.lang.submit }}</button>
 </form>
 {% endblock %}
+

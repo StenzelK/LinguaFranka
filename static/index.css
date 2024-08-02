@@ -19,9 +19,21 @@
     border: 2px solid #333;
     border-radius: 8px;
     overflow-y: auto;
-    padding: 20px;
     background-color: #fff;
     flex-shrink: 0; /* Prevent boxes from shrinking */
+}
+
+#explanationBoxTitle {
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    text-align: center;
+    font-weight: bold;
+}
+
+#explanationBoxInner {
+    padding: 10px;
+    text-align: left;
 }
 
 #questionBox {
@@ -91,6 +103,7 @@
     padding: 20px;
     height: calc(100% - 40px); /* Adjusting for the title bar height */
 }
+
 
 .chat-box {
     width: fit-content;

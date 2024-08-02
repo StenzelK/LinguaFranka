@@ -1,10 +1,11 @@
 settings:
-  auto_translate: false
-  desired_scenario: Casual conversation
+  auto_translate: true
+  desired_scenario: Reporting a lost or stolen card
+  llm_select: gpt-3
   overwrite_sys_lang: true
-  overwrite_token_limit: false
-  practice_lang: de
+  overwrite_token_limit: true
+  practice_lang: en
   practice_lang_prof: beginner
   user_lang: pl
-  user_profile: Default
-  user_token_limit: 3000
+  user_profile: Basia
+  user_token_limit: 5000

@@ -1,7 +1,6 @@
 import json
 import locale
 import os
-from API_keys import GOOGLE_CLOUD_API
 import httpx
 import yaml
 from GPT_tools import gpt_get_chat_initialise, gpt_guess_lang, gpt_get_chat_response, gpt_get_user_comment, gpt_get_bot_explain, gpt_get_bot_answer
@@ -85,7 +84,7 @@ def load_languages():
         return []
 
         
-def translate_string(string, lang, api_key=GOOGLE_CLOUD_API):
+def translate_string(string, lang, api_key):
     """
     Translates a string into the specified language using Google Translate API via httpx.
 
@@ -136,7 +135,7 @@ def load_translations(site_lang):
         # If not, use the default English language file
         try:
             get_global_translation(site_lang)
-        except ValueError:
+        except Exception:  # Catching all exceptions
             language_file_path = os.path.join(base_dir, 'en.json')
     
     # Load the JSON data from the file
@@ -189,65 +188,103 @@ def get_profile_list():
     return profiles
 
 def update_user_profile(new_profile):
-    file_path = "config.yaml"
-    with open(file_path, 'r') as file:
-        config = yaml.safe_load(file)
+    config_path = "config.yaml"
+    profile_path = f"user_profiles/{new_profile}.json"
     
-    # Update the user_profile
+    # Load the new profile from the JSON file
+    with open(profile_path, 'r') as profile_file:
+        new_profile_data = json.load(profile_file)
+    
+    # Read the existing config file
+    with open(config_path, 'r') as config_file:
+        config = yaml.safe_load(config_file)
+    
+    # Update the user_profile and user_lang in the config
     config['settings']['user_profile'] = new_profile
+    config['settings']['user_lang'] = lang_to_code(new_profile_data.get('native_language'))
     
-    # Write the updated data back to the file
-    with open(file_path, 'w') as file:
-        yaml.safe_dump(config, file)
+    # Write the updated data back to the config file
+    with open(config_path, 'w') as config_file:
+        yaml.safe_dump(config, config_file)
         
 def update_practice_language(language, practice_lang_prof, desired_scenario):
     file_path = "config.yaml"
     with open(file_path, 'r') as file:
         config = yaml.safe_load(file)
+        
+    scenarios_file = "translations/en.json"
+    with open(scenarios_file, 'r') as file:
+        scenarios = json.load(file)
+    
+    scenario = find_json_value(scenarios, desired_scenario)
     
     code = lang_to_code(language)
     # Update the practice_lang
     config['settings']['practice_lang'] = code
     config['settings']['practice_lang_prof'] = practice_lang_prof
-    config['settings']['desired_scenario'] = desired_scenario
+    config['settings']['desired_scenario'] = scenario
     
     # Write the updated data back to the file
     with open(file_path, 'w') as file:
         yaml.safe_dump(config, file)
         
+def find_json_value(d, key):
+    if key in d:
+        return d[key]
+    for k, v in d.items():
+        if isinstance(v, dict):
+            result = find_json_value(v, key)
+            if result is not None:
+                return result
+    return None
+        
+def update_config(**kwargs):
+    file_path = "config.yaml"
+    with open(file_path, 'r') as file:
+        config = yaml.safe_load(file)
+    
+    # Update the user_profile with kwargs
+    for key, value in kwargs.items():
+        if key in config['settings']:
+            config['settings'][key] = value
+    
+    # Write the updated data back to the file
+    with open(file_path, 'w') as file:
+        yaml.safe_dump(config, file)
 
-def lang_to_code(name, failover=False, depth=0):
-    """
-    Converts a partial or full language name to its corresponding ISO-639-1 code.
+def update_apis(**kwargs):
+    file_path = "API_keys.py"
+    with open(file_path, 'r') as file:
+        lines = file.readlines()
     
-    Attempts to normalize input into English.
-    
-    If no code is found, attempts AI interpretation of input to determine the language.
-    Limits recursion to a single failover attempt.
-    
-    If AI failover is not successful, returns "NoLang".
-    
-    Args:
-    name (str): The partial or full name of the language.
-    failover (bool): Whether the function is in failover mode.
-    depth (int): Current recursion depth, default is 0.
-    
-    Returns:
-    str: The first matching ISO-639-1 code or "NoLang" if no match is found.
-    """
+    api_keys = {
+        'gpt3_api_key': 'OPENAI_API',
+        'gemini_api_key': 'GEMINI_API',
+        'llama3_api_key': 'LLAMA_API'
+    }
+
+    # Create a dictionary for the current API keys
+    api_replacements = {api_keys[key]: value for key, value in kwargs.items() if key in api_keys}
+
+    # Update the lines with the new API keys
+    with open(file_path, 'w') as file:
+        for line in lines:
+            for api_var, new_value in api_replacements.items():
+                if line.startswith(api_var):
+                    line = f"{api_var} = \"{new_value}\"\n"
+            file.write(line)
+        
+
+def lang_to_code(name):
+
     name = name.lower()
     #name = translate_string(name, "en")
     languages = load_languages()
     for language in languages:
         if name in language['name'].lower():
             return language['code']
-
-    # Check if failover is already used or if the depth limit is reached
-    if not failover and depth < 1:
-        guess_name = gpt_guess_lang(name)  # Assuming this function returns a guessed language name
-        return lang_to_code(guess_name, failover=True, depth=depth+1)
     
-    return "NoLang"
+    return gpt_guess_lang(name)
 
 def code_to_lang(code):
     """
@@ -260,6 +297,7 @@ def code_to_lang(code):
     str: The full name of the language or code if the code is not found.
     """
     languages = load_languages()
+    print(f"Code: {code}")
     for language in languages:
         if code.lower() == language['code']:
             return language['name']
