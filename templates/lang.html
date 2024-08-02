@@ -29,7 +29,7 @@
 
 <form action="/chooselang" method="POST">
     <label for="language">{{ content.lang.choose_language }}:</label>
-    <input type="text" id="language" name="language" required>
+    <input type="text" id="language" name="language" value="{{ content.practice_lang }}" required>
     <label for="language_prof">{{ content.lang.proficiency }}:</label>
     <select id="practice_lang_prof" name="practice_lang_prof">
         <option value="beginner" selected>{{ content.lang.levels.beginner }}</option>

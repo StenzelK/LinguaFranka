@@ -1,11 +1,38 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background-color: #f4f4f9; /* Light background color for the entire page */
+}
+
+h1 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #333;
+}
+
 form {
     display: flex;
     flex-direction: column;
-    width: 300px; /* Adjust the width as needed */
-    margin: 0 auto; /* Center the form horizontally */
+    max-width: 400px; /* Adjust the max-width as needed */
+    margin: 20px auto; /* Center the form on the page */
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
 }
 
-label, input, select, button {
+label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type="text"], input[type="number"], select {
+    width: 100%; /* Make input fields full width */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Ensure padding and border are included in the element's total width and height */
     margin-bottom: 15px; /* Add space between elements */
 }
 
@@ -17,10 +44,14 @@ button[type="submit"] {
     color: #fff;
     cursor: pointer;
     font-size: 16px; /* Unified font size */
-    margin-left: auto; /* Center the submit button */
-    margin-right: auto; /* Center the submit button */
+    align-self: center; /* Center the submit button */
 }
 
 button[type="submit"]:hover {
     background-color: #0056b3; /* Unified hover background color */
+}
+
+.custom-option-input {
+    display: none; /* Initially hide custom option input */
+    margin-bottom: 15px;
 }

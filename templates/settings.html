@@ -10,15 +10,23 @@
 
 {% block content %}
 <form action="/changesettings" method="post">
-    <label for="auto_translate">{{ content.settings.auto_translate }}:</label>
-    <input type="checkbox" id="auto_translate" name="auto_translate" {{ 'checked' if content.config.auto_translate else '' }}><br><br>
+    <label for="auto_translate">
+        {{ content.settings.auto_translate }}:
+        <input type="checkbox" id="auto_translate" name="auto_translate" {{ 'checked' if content.config.auto_translate else '' }} style="float: right;">
+        <br><br>
+    </label>
     
-    <label for="overwrite_sys_lang">{{ content.settings.overwrite_sys_lang }}:</label>
-    <input type="checkbox" id="overwrite_sys_lang" name="overwrite_sys_lang" {{ 'checked' if content.config.overwrite_sys_lang else '' }}><br><br>
+    <label for="overwrite_sys_lang">
+        {{ content.settings.overwrite_sys_lang }}:
+        <input type="checkbox" id="overwrite_sys_lang" name="overwrite_sys_lang" {{ 'checked' if content.config.overwrite_sys_lang else '' }} style="float: right;">
+        <br><br>
+    </label>
     
-    <label for="overwrite_token_limit">{{ content.settings.overwrite_token_limit }}:</label>
-    <input type="checkbox" id="overwrite_token_limit" name="overwrite_token_limit" {{ 'checked' if content.config.overwrite_token_limit else '' }}><br><br>
-    
+    <label for="overwrite_token_limit">
+        {{ content.settings.overwrite_token_limit }}:
+        <input type="checkbox" id="overwrite_token_limit" name="overwrite_token_limit" {{ 'checked' if content.config.overwrite_token_limit else '' }} style="float: right;">
+        <br><br>
+    </label>
     <label for="user_token_limit">{{ content.settings.user_token_limit }}:</label>
     <input type="number" id="user_token_limit" name="user_token_limit" value="{{ content.config.user_token_limit }}"><br><br>
     
