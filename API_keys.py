@@ -1,3 +1,3 @@
-GOOGLE_CLOUD_API = ""
 OPENAI_API = ""
 GEMINI_API = ""
+LLAMA_API = ""
