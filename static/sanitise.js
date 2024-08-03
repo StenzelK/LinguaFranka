@@ -1,4 +1,4 @@
-document.querySelectorAll('form.dataForm').forEach(form => {
+document.querySelectorAll('form').forEach(form => {
     form.addEventListener('submit', function(event) {
         event.preventDefault();
 
