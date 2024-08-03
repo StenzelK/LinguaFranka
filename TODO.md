@@ -65,6 +65,20 @@
    - **Difficulty: 1/5**
    - Move the fixed demo text to auto-translate once it's fixed
 
+12. **Gemini API integration**
+   - **Difficulty: 4/5**
+   - Implement requiered functionalities for Gemini
+
+
+13. **LLaMa2 API integration**
+   - **Difficulty: 4/5**
+   - Implement requiered functionalities for LLaMa2
+
+
+14. **AI interface overhaul**
+   - **Difficulty: 5/5**
+   - Rewrite backend logic to be model agnostic and support seemless model change via single parameter
+
 ## Bugs
 
 ### To Fix
@@ -92,6 +106,11 @@
 5. **Language explanation chooses a random language when both practice and user language are the same**
    - **Priority: Low**
    - Fringe scenario that will likely never happen in actual use
+
+6. **Form data appears to get trunkated in some edge cases**
+   - **Priority: Medium**
+   - User observed incomplete translation during a conversation in Italian, log inspection confirmed only partof the text was parsed, potential culprit is the character "
+   - Suggestion: Introduce escape characters during the initial parsing
 
 ## Considerations
 
