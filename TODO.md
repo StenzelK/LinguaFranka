@@ -7,6 +7,7 @@
 1. **Settings Panel**
    - **Difficulty: 1/5**
    - Design and implement a user-friendly settings interface that allows users to customize their preferences.
+   - **DONE**
 
 2. **OpenAI API Integration**
    - **Difficulty: 4/5**
