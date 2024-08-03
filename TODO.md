@@ -28,43 +28,53 @@
 5. **Chat Selection**
    - **Difficulty: 2/5**
    - Implement storage and selection for past chat instances
+   - **OUT OF SCOPE**
 
 6. **AI bots generation**
    - **Difficulty:3/5**
    - Implement a system for generating bot personalities based on practice language and user interest-
-   - **50% DONE**
+   - **OUT OF SCOPE**
 
 6. **Bot selection**
    - **Difficulty: 2/5**
    -Implement storage and selection of bots based on practice language
+   - **OUT OF SCOPE**
 
 5. **User Prompt Commentary**
    - **Difficulty: 3/5**
    - Implement a feature where the AI uses OpenAI's API to provide commentary on texts submitted by users.
+   - **DONE**
 
 6. **Bot Response Explanation**
    - **Difficulty: 3/5**
    - Use OpenAI's API to generate detailed explanations of the AI bot's responses to enhance user understanding.
+   - **DONE**
 
 7. **UX Design**
    - **Difficulty: 4/5**
    - Craft an intuitive, engaging, and accessible user experience design for a wide range of users.
+   - **DONE**
 
 8. **One Click Installer**
    - **Difficulty: 2/5**
    - Develop a straightforward installation process that simplifies setup to a single-click action for users.
+   - **DONE - dependent on user OS**
+   - Lack of admin rights may prevent automatic python installation
 
 9. **End-User Evaluation**
    - **Difficulty: 1/5**
    - Distribute the application to a select group of beta users to procure valuable insights and feedback.
+   - **IN PROGRESS**
 
 10. **Rebuild auto-translate**
    - **Difficulty: 2/5**
    - Googletrans and openai modules conflict in httpx version, rewrite auto-translate using GCP 
+   - **OUT OF SCOPE**
 
 11. **Add new texts to the auto-translate json file**
    - **Difficulty: 1/5**
    - Move the fixed demo text to auto-translate once it's fixed
+   - **DONE**
 
 12. **Gemini API integration**
    - **Difficulty: 4/5**
@@ -79,6 +89,10 @@
 14. **AI interface overhaul**
    - **Difficulty: 5/5**
    - Rewrite backend logic to be model agnostic and support seemless model change via single parameter
+
+15. **README and totorial**
+   - **Difficulty: 2/5**
+   - Write a README for GIT and a tutorial for new users
 
 ## Bugs
 
@@ -131,4 +145,4 @@
 
 1. **Implement a tutorial for new users**
 	- **Consideration: Nessesary?**
-	- To be determined based on tester feedback
+	- Nessesary, see functionality 15
