@@ -186,7 +186,8 @@
             "llm_select": "Wybierz model",
             "gpt3_api_key": "Klucz API GPT-3",
             "gemini_api_key": "Klucz API Gemini",
-            "llama3_api_key": "Klucz API LLaMa3",
+            "llama_api_key": "Klucz API LLaMa",
+            "claude_api_key": "Klucz API Claude",
             "submit": "Zatwierdź"  
     }
 

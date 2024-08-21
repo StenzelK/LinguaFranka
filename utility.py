@@ -5,6 +5,7 @@ import os
 import re
 import httpx
 import yaml
+from LLM_abstract import llm_get_bot_answer, llm_get_bot_explain, llm_get_chat_initialise, llm_get_chat_response, llm_get_user_comment, llm_guess_lang
 from GPT_tools import gpt_get_chat_initialise, gpt_guess_lang, gpt_get_chat_response, gpt_get_user_comment, gpt_get_bot_explain, gpt_get_bot_answer
 import tiktoken
 
@@ -286,7 +287,7 @@ def lang_to_code(name):
         if name in language['name'].lower():
             return language['code']
     
-    return gpt_guess_lang(name)
+    return llm_guess_lang(name)
 
 def code_to_lang(code):
     """
@@ -461,7 +462,7 @@ def initialize_chat_log():
     file_path = os.path.join(directory, file_name)
     
     if not os.path.exists(file_path):
-        initial_response = gpt_get_chat_initialise([], practice_lang, "N/A", user_profile, practice_lang_prof, desired_scenario)
+        initial_response = llm_get_chat_initialise([], practice_lang, "N/A", user_profile, practice_lang_prof, desired_scenario)
         print(f'Initial bot response: {initial_response}')
         
         initial_log = {
@@ -522,7 +523,7 @@ def handle_message(content):
     append_chatlog(content, file_path, role='user')
     context = get_context_to_token_limit(file_path)
 
-    bot_response = gpt_get_chat_response(context, practice_lang, "N/A", user_profile, practice_lang_prof, desired_scenario)
+    bot_response = llm_get_chat_response(context, practice_lang, "N/A", user_profile, practice_lang_prof, desired_scenario)
     print(f'Bot response: {bot_response}')
     append_chatlog(bot_response, file_path, role='system')
     
@@ -547,7 +548,7 @@ def handle_question(content):
     practice_lang = code_to_lang(site_data["practice_lang"])
     user_lang = code_to_lang(site_data["site_lang"])
     
-    answer = gpt_get_bot_answer(content, practice_lang, user_lang)
+    answer = llm_get_bot_answer(content, practice_lang, user_lang)
     print(f'Answer: {answer}')
 
     return {"type": "question", "message": "Question received", "answer": answer}
@@ -571,9 +572,9 @@ def handle_explain(content):
     
     if content['role'] == 'system':
         
-        explanation = gpt_get_bot_explain(content['message'], practice_lang, user_lang)
+        explanation = llm_get_bot_explain(content['message'], practice_lang, user_lang)
     else:
-        explanation = gpt_get_user_comment(content['message'], practice_lang, user_lang)
+        explanation = llm_get_user_comment(content['message'], practice_lang, user_lang)
     
     
     print(f'Explanation: {explanation}')
