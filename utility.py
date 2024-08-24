@@ -1,12 +1,9 @@
-import html
 import json
 import locale
 import os
-import re
 import httpx
 import yaml
 from LLM_abstract import llm_get_bot_answer, llm_get_bot_explain, llm_get_chat_initialise, llm_get_chat_response, llm_get_user_comment, llm_guess_lang
-from GPT_tools import gpt_get_chat_initialise, gpt_guess_lang, gpt_get_chat_response, gpt_get_user_comment, gpt_get_bot_explain, gpt_get_bot_answer
 import tiktoken
 from iso639 import languages
 
@@ -343,7 +340,7 @@ def append_chatlog(text, file_path, role):
         data = {"log": []}  # Initialize with an empty log if file doesn't exist or is empty
 
     # Append the new dictionary to the log list
-    app_dict = {"role": role, "message": text}
+    app_dict = {"role": role, "content": text}
     data["log"].append(app_dict)
 
     # Write the updated data back to the file
@@ -423,7 +420,7 @@ def get_context_to_token_limit(file_path, token_limit=2900):
 
     for entry in reversed(log_entries):
 
-        message_tokens = len(encoding.encode(entry["message"]))
+        message_tokens = len(encoding.encode(entry["content"]))
         
         if total_tokens + message_tokens <= token_limit:
             truncated_log.append(entry)
@@ -433,7 +430,7 @@ def get_context_to_token_limit(file_path, token_limit=2900):
     
     # Format the truncated log entries as required
     formatted_log = [
-        {"role": entry["role"], "content": entry["message"]}
+        {"role": entry["role"], "content": entry["content"]}
         for entry in truncated_log[::-1]
     ]
 
@@ -465,7 +462,7 @@ def initialize_chat_log():
         
         initial_log = {
             "log": [
-                {"role": "system", "message": initial_response}
+                {"role": "system", "content": initial_response}
             ]
         }
         

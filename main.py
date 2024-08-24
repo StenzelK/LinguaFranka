@@ -1,4 +1,5 @@
 import logging
+import re
 from fastapi import FastAPI, Form, Request, WebSocket, WebSocketDisconnect
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
@@ -448,8 +449,9 @@ async def reset_chat(request: Request):
     site_data = load_site_data()
 
     practice_lang = code_to_lang(site_data["practice_lang"])
+    sanitized_practice_lang = re.sub(r'[<>:"/\\|?*]', '_', practice_lang) #failsafe for AI 'creativity
     base_dir = "chat_logs"
-    directory = os.path.join(base_dir, practice_lang)
+    directory = os.path.join(base_dir, sanitized_practice_lang)
     
     os.makedirs(directory, exist_ok=True)
     file_name = 'log.json'

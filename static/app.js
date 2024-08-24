@@ -110,24 +110,24 @@ function hideLoadingSpinner() {
     spinner.style.display = 'none';
 }
 
-function parseMessage(chatlog) {
-    let parsedChat = '';
-    chatlog.forEach(function(message, index) {
-        let roleClass = message["role"] === 'system' ? 'left-aligned' : 'right-aligned';
-        parsedChat += `<div class="chat-box ${roleClass}" data-role="${message["role"]}" data-message="${message["message"]}">
-            ${message["message"]}
-        </div>`;
-    });
-    return parsedChat;
-}
+// function parseMessage(chatlog) {
+//     let parsedChat = '';
+//     chatlog.forEach(function(message, index) {
+//         let roleClass = message["role"] === 'system' ? 'left-aligned' : 'right-aligned';
+//         parsedChat += `<div class="chat-box ${roleClass}" data-role="${message["role"]}" data-message="${message["message"]}">
+//             ${message["message"]}
+//         </div>`;
+//     });
+//     return parsedChat;
+// }
 
 function parseMessage(chatlog) {
     let parsedChat = '';
     chatlog.forEach(function(message, index) {
         console.log(message);
         let roleClass = message["role"] === 'system' ? 'left-aligned' : 'right-aligned';
-        parsedChat += `<div class="chat-box ${roleClass}" data-role="${message["role"]}" data-message="${message["message"]}" data-index="${index}" onclick="handleMessageClick(event)">
-            ${message["message"]}
+        parsedChat += `<div class="chat-box ${roleClass}" data-role="${message["role"]}" data-message="${message["content"]}" data-index="${index}" onclick="handleMessageClick(event)">
+            ${message["content"]}
         </div>`;
     });
     return parsedChat;
