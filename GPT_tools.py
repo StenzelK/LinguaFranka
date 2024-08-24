@@ -1,6 +1,5 @@
 import json
 from openai import OpenAI
-import yaml
 from API_keys import OPENAI_API
 from pprint import pprint
 
