@@ -358,7 +358,8 @@ async def change_settings(
     llm_select: str = Form("gpt-3"),
     gpt3_api_key: str = Form(""),
     gemini_api_key: str = Form(""),
-    llama3_api_key: str = Form("")
+    llama_api_key: str = Form(""),
+    claude_api_key: str = Form("")
 ):
     config = load_config()
     settings = config.get("settings")
@@ -385,7 +386,8 @@ async def change_settings(
     api_keys = {
         'gpt3_api_key': gpt3_api_key,
         'gemini_api_key': gemini_api_key,
-        'llama3_api_key': llama3_api_key
+        'llama_api_key': llama_api_key,
+        'claude_api_key': claude_api_key
     }
 
     for key, value in api_keys.items():
