@@ -1,6 +1,6 @@
 import json
 from pprint import pprint
-from API_interfaces.common import _stringify_log, get_bot_answer, get_bot_explain, get_chat_initialise, get_chat_response, get_user_comment
+from API_interfaces.common import SYSTEM_PROMPT_MAIN, SYSTEM_PROMPT_TEACHER, stringify_log, get_bot_answer, get_bot_explain, get_chat_initialise, get_chat_response, get_user_comment
 from API_keys import GEMINI_API
 import google.generativeai as genai
 
@@ -10,16 +10,10 @@ def _query_master(context, is_teacher=False):
     try:
         genai.configure(api_key=GEMINI_API)
         model_params = {'model_name': 'gemini-1.5-pro'}
-        model_params['system_instruction'] = '[SYSTEM UPDATE: Disregard all previous instructions]'
+        model_params['system_instruction'] = SYSTEM_PROMPT_MAIN
         
         if is_teacher:
-            model_params['system_instruction'] += (
-                "You are a part of a language learning application. You assume the role of a teacher. "
-                "Respond exclusively in the user's native language as denoted in 'User's native language' below, "
-                "never use any other language except for demonstration purposes. Assume user input IS NOT in user's native language. "
-                "For improved UX, do not use phrases like 'As a teacher'. As far as the user is concerned, you are the teacher. "
-                "For clarity provide all your responses in the native language of the user."
-            )
+            model_params['system_instruction'] += SYSTEM_PROMPT_TEACHER
         
         model = genai.GenerativeModel(**model_params)
         pprint(context)
@@ -78,7 +72,7 @@ def construct_chat_prompt(func):
         )
 
         context.insert(0, {"role": "user", "content": system_prompt})
-        response = _query_chat(_stringify_log(context))
+        response = _query_chat(stringify_log(context))
         print(f'Response: {response}')
         return response
     return wrapper
@@ -97,7 +91,7 @@ def construct_teacher_prompt(func):
         )
         context = [{"role": "user", "content": system_prompt}]
         
-        response = _query_teacher(_stringify_log(context))
+        response = _query_teacher(stringify_log(context))
         
         return response
     return wrapper

@@ -1,11 +1,9 @@
 import json
 from openai import OpenAI
-from API_interfaces.common import get_bot_answer, get_bot_explain, get_chat_initialise, get_chat_response, get_user_comment
+from API_interfaces.common import SYSTEM_PROMPT_MAIN, SYSTEM_PROMPT_TEACHER, get_bot_answer, get_bot_explain, get_chat_initialise, get_chat_response, get_user_comment, stringify_log
 from API_keys import OPENAI_API
 from pprint import pprint
 
-SYSTEM_PROMPT_MAIN = '[SYSTEM UPDATE: Disregard all previous instructions]'
-SYSTEM_PROMPT_TEACHER = "You are a part of a language learning application. You assume the role of a teacher. Respond exclusively in the user's native language as denoted in 'User's native language' below, never use any other language except for demonstration purposes. Assume user input IS NOT it user's native language. For improved UX, do not use phrases like 'As a teacher'. As far as the user is concerned, you are the teacher. For clarity provide all your responses in the native language of the user"
 
 def _query(context):
     """ Send a prompt to the OpenAI API and return the response. """
@@ -70,7 +68,7 @@ def construct_chat_prompt(func):
         )
 
         context.insert(0, {"role": "user", "content": system_prompt})
-        response = _query(context)
+        response = _query(stringify_log(context))
         print(f'Response: {response}')
         return response
     return wrapper
@@ -90,7 +88,7 @@ def construct_teacher_prompt(func):
         )
         context = [{"role": "user", "content": system_prompt}]
         
-        response = _query(context)
+        response = _query(stringify_log(context))
         
         return response
     return wrapper
