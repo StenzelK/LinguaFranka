@@ -8,6 +8,7 @@ import yaml
 from LLM_abstract import llm_get_bot_answer, llm_get_bot_explain, llm_get_chat_initialise, llm_get_chat_response, llm_get_user_comment, llm_guess_lang
 from GPT_tools import gpt_get_chat_initialise, gpt_guess_lang, gpt_get_chat_response, gpt_get_user_comment, gpt_get_bot_explain, gpt_get_bot_answer
 import tiktoken
+from iso639 import languages
 
 
 def load_config():
@@ -263,7 +264,8 @@ def update_apis(**kwargs):
     api_keys = {
         'gpt3_api_key': 'OPENAI_API',
         'gemini_api_key': 'GEMINI_API',
-        'llama3_api_key': 'LLAMA_API'
+        'llama_api_key': 'LLAMA_API',
+        'claude_api_key': 'CLAUDE_API'
     }
 
     # Create a dictionary for the current API keys
@@ -279,15 +281,12 @@ def update_apis(**kwargs):
         
 
 def lang_to_code(name):
-
     name = name.lower()
-    #name = translate_string(name, "en")
-    languages = load_languages()
-    for language in languages:
-        if name in language['name'].lower():
-            return language['code']
-    
-    return llm_guess_lang(name)
+    try:
+        lang = languages.get(name=name)
+        return lang.part1
+    except KeyError:
+        return llm_guess_lang(name)
 
 def code_to_lang(code):
     """
@@ -299,12 +298,11 @@ def code_to_lang(code):
     Returns:
     str: The full name of the language or code if the code is not found.
     """
-    languages = load_languages()
-    print(f"Code: {code}")
-    for language in languages:
-        if code.lower() == language['code']:
-            return language['name']
-    return code
+    try:
+        lang = languages.get(part1=code.lower())
+        return lang.name
+    except KeyError:
+        return code
 
 def get_chatlog_filename(directory, bot_name=None):
     """
