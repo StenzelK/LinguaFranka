@@ -1,29 +1,46 @@
-const ws = new WebSocket("ws://localhost:23335/ws");
+let ws;
+let reconnectInterval = 1000; // Initial reconnection delay
 
-ws.onopen = function(event) {
-    console.log("WebSocket is open now.");
-};
+function connectWebSocket() {
+    ws = new WebSocket("ws://localhost:23335/ws");
 
-ws.onclose = function(event) {
-    console.log("WebSocket is closed now.");
-};
+    ws.onopen = function(event) {
+        console.log("WebSocket is open now.");
+        reconnectInterval = 1000; // Reset interval on successful connection
+    };
 
-ws.onerror = function(event) {
-    console.error("WebSocket error observed:", event);
-};
+    ws.onclose = function(event) {
+        console.log("WebSocket is closed now.");
+        reconnectWebSocket();
+    };
 
-ws.onmessage = function(event) {
-    //console.log("Called");
-    const data = JSON.parse(event.data);
+    ws.onerror = function(event) {
+        console.error("WebSocket error observed:", event);
+    };
 
-    if (data.type === "message") {
-        handleChatMessage(data);
-    } else if (data.type === "question") {
-        handleQuestionResponse(data);
-    } else if (data.type === "explanation") {
-        handleExplanationResponse(data);
-    }
-};
+    ws.onmessage = function(event) {
+        const data = JSON.parse(event.data);
+
+        if (data.type === "message") {
+            handleChatMessage(data);
+        } else if (data.type === "question") {
+            handleQuestionResponse(data);
+        } else if (data.type === "explanation") {
+            handleExplanationResponse(data);
+        }
+    };
+}
+
+function reconnectWebSocket() {
+    setTimeout(() => {
+        console.log("Attempting to reconnect...");
+        connectWebSocket();
+        // Exponential backoff
+        reconnectInterval = Math.min(reconnectInterval * 2, 30000); // Cap at 30 seconds
+    }, reconnectInterval);
+}
+
+connectWebSocket();
 
 function handleChatMessage(data) {
     const chatBox = document.getElementById('chatBoxInner');
