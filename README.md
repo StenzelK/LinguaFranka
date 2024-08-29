@@ -1,10 +1,11 @@
+
 # LinguaFranka
 
 Welcome to **LinguaFranka**, a language learning app that simulates conversations with a native speaker using state-of-the-art language models.
 
 ## Features
 
-- **Simulated Conversations**: Chat with AI models like GPT-3.5, Gemini1.5-Pro, LLaMa2, and Claude 3 Haiku.
+- **Simulated Conversations**: Chat with AI models like GPT-3.5, Gemini1.5-Pro, LLaMa2, and Claude 3.5 Sonnet.
 - **Profile Customization**: Create a personalized profile to enhance your learning experience.
 - **Scenario Selection**: Choose specific scenarios for your conversations to match real-world situations.
 - **Self-Hosted**: Run the app directly on your machine for privacy and control.
@@ -26,6 +27,10 @@ Welcome to **LinguaFranka**, a language learning app that simulates conversation
    pip install -r requirements.txt
    ```
 
+4. **Provide API Keys**:
+   - Once the app is running, navigate to the **Settings** tab.
+   - Enter your API keys for each language model (e.g., GPT-3.5, Gemini1.5-Pro, LLaMa2, Claude 3.5 Sonnet).
+
 ## Usage
 
 - **Start the Application**:
@@ -41,3 +46,8 @@ Welcome to **LinguaFranka**, a language learning app that simulates conversation
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Support
+
+For support, please open an issue in the repository or contact us directly.
+
