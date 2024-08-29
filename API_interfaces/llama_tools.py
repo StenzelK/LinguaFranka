@@ -1,8 +1,5 @@
 import json
-from pprint import pprint
 from llamaapi import LlamaAPI
-import requests
-import yaml
 from API_interfaces.common import SYSTEM_PROMPT_MAIN, SYSTEM_PROMPT_TEACHER, get_bot_answer, get_bot_explain, get_chat_initialise, get_chat_response, get_user_comment, stringify_log
 from API_keys import LLAMA_API
 
