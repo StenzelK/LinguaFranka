@@ -1,33 +1,35 @@
+import anthropic
 import requests
 import json
 
-import yaml
 
 from API_interfaces.common import SYSTEM_PROMPT_MAIN, SYSTEM_PROMPT_TEACHER, get_bot_answer, get_bot_explain, get_chat_initialise, get_chat_response, get_user_comment
 from API_keys import CLAUDE_API
 
+def replace_system_with_assistant(context):
+    for item in context:
+        if item['role'] == 'system':
+            item['role'] = 'assistant'
+    return context
+
 def _query(context):
 
-    url = 'https://api.anthropic.com/v1/conversations'
-    
-    headers = {
-        'Content-Type': 'application/json',
-        'Authorization': f'Bearer {CLAUDE_API}'
-    }
-    
-    data = {
-        'model': 'claude-2',
-        'messages': context,
-        'max_tokens_to_sample': yaml.safe_load(open('config.yaml'))['settings']['user_token_limit']
-    }
-    
+    #print('Claude call')
+    context = replace_system_with_assistant(context)
     try:
-        response = requests.post(url, headers=headers, data=json.dumps(data))
-        response.raise_for_status()  # Raise an exception for bad status codes
+        client = anthropic.Anthropic(
+        api_key=CLAUDE_API,)
+
+        message = client.messages.create(
+            model="claude-3-5-sonnet-20240620",
+            max_tokens=1024,
+            messages=context
+        )   
         
-        result = response.json()
-        return result['messages'][0]['content']
-    
+        
+        
+        return message.content[0].text
+        
     except requests.exceptions.RequestException as e:
         print(f"An error occurred: {e}")
         return "API Error"

@@ -2,6 +2,9 @@
 #-------------Tools------------------#
 ######################################
 
+from pprint import pprint
+
+
 def stringify_log(log: list) -> str:
     """
     Converts a list of log dictionaries into a string format.
@@ -15,9 +18,10 @@ def stringify_log(log: list) -> str:
         "User:" or "Assistant:" depending on the role.
     """
     role_map = {'user': 'User', 'system': 'Assistant'}
+    print(f'Log: {log}')
     return '\n'.join(
-        f"{role_map.get(message['role'].lower(), message['role'])}: {message['message']}"
-        for message in log
+        f"{role_map.get(entry['role'].lower(), entry['role'])}: {entry['content']}"
+        for entry in log
     ).strip()
 
 ######################################
@@ -33,6 +37,7 @@ def get_chat_initialise(context, practice_lang, persona, user_profile, practice_
 
 def get_chat_response(context, practice_lang, persona, user_profile, practice_lang_prof, desired_scenario):
     """Continue the conversation based on the user's input."""
+    print('called')
     pass
 
 def get_user_comment(prompt, practice_lang, user_lang):

@@ -52,8 +52,8 @@ def llm_get_chat_initialise(context, practice_lang, persona, user_profile, pract
     switch = {
         "gpt-3": gpt_get_chat_initialise,
         "gemini": gemini_get_chat_initialise,
-        # "llama": llama_get_chat_initialise,
-        # "claude": claude_get_chat_initialise,
+        "llama": llama_get_chat_initialise,
+        "claude": claude_get_chat_initialise,
     }
     return llm_function_dispatcher(switch, context, practice_lang, persona, user_profile, practice_lang_prof, desired_scenario)
 

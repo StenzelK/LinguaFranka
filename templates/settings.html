@@ -36,7 +36,7 @@
     <select id="llm_select" name="llm_select">
         <option value="gpt-3" {% if content.config.llm_select == 'gpt-3' %}selected{% endif %}>GPT-3</option>
         <option value="gemini" {% if content.config.llm_select == 'gemini' %}selected{% endif %}>Gemini</option>
-        <option value="llama" {% if content.config.llm_select == 'llama' %}selected{% endif %}>LLaMa</option>
+        <option value="llama" {% if content.config.llm_select == 'llama' %}selected{% endif %} disabled>LLaMa</option>
         <option value="claude" {% if content.config.llm_select == 'claude' %}selected{% endif %}>Claude</option>
     </select><br><br>
     
@@ -47,7 +47,7 @@
     <input type="password" id="gemini_api_key" name="gemini_api_key"><br><br>
     
     <label for="llama_api_key">{{ content.settings.llama_api_key }}:</label>
-    <input type="password" id="llama_api_key" name="llama_api_key"><br><br>
+    <input type="password" id="llama_api_key" name="llama_api_key" disabled><br><br>
 
     <label for="claude_api_key">{{ content.settings.claude_api_key }}:</label>
     <input type="password" id="claude_api_key" name="claude_api_key"><br><br>

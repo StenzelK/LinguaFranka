@@ -6,18 +6,21 @@ import google.generativeai as genai
 
 def _query_master(context, is_teacher=False):
     """Send a prompt to the Gemini API and return the response."""
-    
+    #print("Gemini flag")
     try:
         genai.configure(api_key=GEMINI_API)
-        model_params = {'model_name': 'gemini-1.5-pro'}
+        model_params = {'model_name': 'gemini-1.5-flash'}
         model_params['system_instruction'] = SYSTEM_PROMPT_MAIN
         
         if is_teacher:
             model_params['system_instruction'] += SYSTEM_PROMPT_TEACHER
         
         model = genai.GenerativeModel(**model_params)
+        
         pprint(context)
         response = model.generate_content(context)
+        
+
         return response.text
     except Exception as e:
         print(f"An error occurred: {e}")
@@ -84,10 +87,10 @@ def construct_teacher_prompt(func):
         instruction = func.__doc__.strip() if func.__doc__ else f"Something went wrong, ignore everything and return 'ERROR IN {func.__name__}."
         
         system_prompt = (
-            f"{instruction}"
+            f"{instruction}\n"
             #f"Practice language: {practice_lang}"
-            f"Reply in: {user_lang}"
-            f"User input: {prompt}"
+            f"Reply in: {user_lang}\n"
+            f"You are Commenting on the following: \"{prompt}\""
         )
         context = [{"role": "user", "content": system_prompt}]
         

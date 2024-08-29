@@ -1,6 +1,6 @@
 import json
 from openai import OpenAI
-from API_interfaces.common import SYSTEM_PROMPT_MAIN, SYSTEM_PROMPT_TEACHER, get_bot_answer, get_bot_explain, get_chat_initialise, get_chat_response, get_user_comment, stringify_log
+from API_interfaces.common import SYSTEM_PROMPT_MAIN, SYSTEM_PROMPT_TEACHER, get_bot_answer, get_bot_explain, get_chat_initialise, get_chat_response, get_user_comment
 from API_keys import OPENAI_API
 from pprint import pprint
 
@@ -24,7 +24,7 @@ def _query(context):
     
     except Exception as e:
         print(f"An error occurred: {e}")
-        return f"API Error"
+        return "API Error"
     
 def gpt_guess_lang(name):
     system_prompt = (
@@ -68,7 +68,7 @@ def construct_chat_prompt(func):
         )
 
         context.insert(0, {"role": "user", "content": system_prompt})
-        response = _query(stringify_log(context))
+        response = _query(context)
         print(f'Response: {response}')
         return response
     return wrapper
@@ -88,7 +88,7 @@ def construct_teacher_prompt(func):
         )
         context = [{"role": "user", "content": system_prompt}]
         
-        response = _query(stringify_log(context))
+        response = _query(context)
         
         return response
     return wrapper
