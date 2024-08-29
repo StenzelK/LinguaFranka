@@ -1,3 +1,4 @@
 OPENAI_API = ""
 GEMINI_API = ""
 LLAMA_API = ""
+CLAUDE_API = ""
