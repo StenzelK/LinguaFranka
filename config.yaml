@@ -1,11 +1,12 @@
 settings:
   auto_translate: true
-  desired_scenario: Reporting a lost or stolen card
+  desired_scenario: You are a hiring manager in LinguaFranka. The user is discussing
+    salary and benefits. Engage in the discussion and provide necessary details.
   llm_select: gpt-3
   overwrite_sys_lang: true
-  overwrite_token_limit: true
-  practice_lang: en
-  practice_lang_prof: beginner
-  user_lang: pl
-  user_profile: Basia
-  user_token_limit: 5000
+  overwrite_token_limit: false
+  practice_lang: English
+  practice_lang_prof: proficient
+  user_lang: Polish
+  user_profile: Kamil
+  user_token_limit: 3000

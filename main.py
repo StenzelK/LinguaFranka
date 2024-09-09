@@ -218,7 +218,7 @@ def read_lang(request: Request):
         raise e
     
 @app.get("/settings", response_class=HTMLResponse)
-def read_lang(request: Request):
+def read_settings(request: Request):
     logger.info("Received request for /settings")
 
     try:

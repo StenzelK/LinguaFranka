@@ -52,6 +52,6 @@ button[type="submit"]:hover {
 }
 
 .custom-option-input {
-    display: none; /* Initially hide custom option input */
+    display: block; /* Initially hide custom option input */
     margin-bottom: 15px;
 }
