@@ -339,7 +339,7 @@ async def choose_language(language: str = Form(...), practice_lang_prof: str = F
     try:
         print(f"Language chosen: {language}")
         logger.debug(f"Language chosen: {language}")
-        
+        language = ''.join(language.split())
         update_practice_language(language, practice_lang_prof, desired_scenario)
         logger.info("Practice language updated successfully")
 

@@ -220,6 +220,7 @@ def update_practice_language(language, practice_lang_prof, desired_scenario):
     scenario = find_json_value(scenarios, desired_scenario)
     
     code = lang_to_code(language)
+    code = ''.join(code.split())
     # Update the practice_lang
     config['settings']['practice_lang'] = code
     config['settings']['practice_lang_prof'] = practice_lang_prof
